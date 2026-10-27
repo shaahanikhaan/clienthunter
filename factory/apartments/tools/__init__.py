@@ -20,6 +20,8 @@ _TOOLS = (
     "file",        # sandboxed filesystem (stdlib)
     "web",         # urllib fetch + DDG search, robots.txt + rate limits
     "scrape",      # Google Maps + directories (CDP) with CSV fallback
+    "maps_api",    # Google Maps internal endpoints - keyless, no Chrome needed
+    "verify",      # email/phone deliverability: raw DNS MX, PK number rules
     "enrich",      # 6-layer email/phone/social extraction
     "audit",       # website audit: SSL, speed, mobile, SEO, links
     "email",       # IMAP/SMTP (waggle-mail when installed)

@@ -1,4 +1,4 @@
-"""ClientHunter Factory v1.3.0.
+"""ClientHunter Factory v1.4.0.
 
 A self-training, offline-first, multi-agent client acquisition factory for a
 Pakistani web agency.
@@ -20,7 +20,7 @@ Package layout:
       data/                user-editable training data
 """
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __codename__ = "Apartment Model"
 
 from pathlib import Path

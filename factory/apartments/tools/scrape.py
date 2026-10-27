@@ -28,6 +28,7 @@ import json
 import random
 import re
 import time
+from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 from urllib.parse import quote_plus
 
@@ -103,6 +104,14 @@ class ScrapeTool:
         self.apartment.gate.enforce(self.apartment.NAME, "scrape_maps",
                                     {"city": city, "category": category})
         self.apartment.require("internet")
+
+        # Tier 1: keyless Maps endpoints (fast, no Chrome needed)
+        if not self._stopped():
+            endpoint_leads = self.scrape_maps_endpoint(
+                city, category, limit=limit, area=area, deep=True, progress=progress)
+            if endpoint_leads:
+                return endpoint_leads
+
         query = "%s in %s %s" % (category, area or "", city)
         query = re.sub(r"\s+", " ", query).strip()
         if progress:
@@ -162,6 +171,92 @@ class ScrapeTool:
         if not leads:
             return self._fallback_search(query, city, category, limit)
         return self._dedupe(leads)[:limit]
+
+    def scrape_maps_endpoint(self, city: str, category: str, limit: int = 20,
+                             area: Optional[str] = None, deep: bool = True,
+                             progress: Optional[Callable[[str], None]] = None,
+                             ) -> List[Dict[str, Any]]:
+        """Tier 1: Google Maps internal endpoints - **no API key, no Chrome**.
+
+        Fetches the same public listing data the Maps UI uses, walks the city's
+        neighbourhoods so results are not limited to the first page, then pulls
+        full details (phone, website, socials) per place.  Returns ``[]`` if
+        Google challenges the request, so the caller falls through to Chrome.
+        """
+        try:
+            maps = self.apartment.tool("maps_api")
+        except Exception as exc:
+            self.apartment.log("maps_api_unavailable", error=str(exc)[:120])
+            return []
+        coords = self.city_coords(city)
+        if coords == (0.0, 0.0):
+            self.apartment.log("maps_api_no_coords", city=city)
+            return []
+        areas = [area] if area else self.city_areas(city)
+        if progress:
+            progress("maps endpoint: %s, %d area(s), backend=%s"
+                     % (city, len(areas), maps.backend))
+        try:
+            rows = maps.sweep(city, category, areas, coords[0], coords[1],
+                              limit=limit, deep=deep, progress=progress)
+        except Exception as exc:
+            self.stats["errors"] += 1
+            self.apartment.log("maps_api_failed", error=str(exc)[:160])
+            return []
+        leads = [self._place_to_lead(row, city, category) for row in rows]
+        leads = [lead for lead in leads if lead.get("name")]
+        self.stats["queries"] += len(areas)
+        self.stats["found"] += len(leads)
+        return self._dedupe(leads)[:limit]
+
+    @staticmethod
+    def _place_to_lead(place: Dict[str, Any], city: str,
+                       category: str) -> Dict[str, Any]:
+        """Maps endpoint payload -> the lead shape the store expects."""
+        socials = place.get("socials") or {}
+        return {
+            "name": (place.get("name") or "")[:90],
+            "phone": place.get("phone") or "",
+            "email": place.get("email") or "",
+            "address": (place.get("address") or "")[:160],
+            "category": category,
+            "city": city,
+            "website": place.get("website") or "",
+            "rating": float(place.get("rating") or 0),
+            "reviews": int(place.get("reviews") or 0),
+            "socials": socials,
+            "place_id": place.get("place_id") or "",
+            "maps_url": place.get("maps_url") or "",
+            "lat": float(place.get("lat") or 0),
+            "lng": float(place.get("lng") or 0),
+            "source": "google_maps_endpoint",
+            "scraped_at": time.time(),
+        }
+
+    @staticmethod
+    def city_coords(city: str) -> Tuple[float, float]:
+        """Approximate city centre, used only to centre the Maps viewport."""
+        data = ScrapeTool._city_row(city)
+        return (float(data.get("lat", 0) or 0), float(data.get("lng", 0) or 0))
+
+    @staticmethod
+    def city_areas(city: str, maximum: int = 12) -> List[str]:
+        """Neighbourhoods to sweep (a city-wide query only ever shows page 1)."""
+        data = ScrapeTool._city_row(city)
+        areas = [str(a) for a in (data.get("areas") or []) if a]
+        return areas[:maximum]
+
+    @staticmethod
+    def _city_row(city: str) -> Dict[str, Any]:
+        try:
+            payload = json.loads((Path(__file__).resolve().parents[2] / "data" /
+                                  "pakistani_cities.json").read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+        for row in payload.get("cities") or []:
+            if str(row.get("name", "")).lower() == str(city or "").lower():
+                return row
+        return {}
 
     def _card_to_lead(self, card: Dict[str, Any], city: str, category: str,
                       query: str) -> Optional[Dict[str, Any]]:

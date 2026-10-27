@@ -1,4 +1,4 @@
-# TRAINING GUIDE - ClientHunter Factory v1.3.0
+# TRAINING GUIDE - ClientHunter Factory v1.4.0
 
 Every "brain" in this factory is a **JSON file trained from JSON data on your
 own machine**. No pickle. No GPU. No downloads. Training the whole thing takes

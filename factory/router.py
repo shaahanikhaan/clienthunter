@@ -16,6 +16,9 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 
 from .ml import tokenize
+import re
+
+from .apartments.tools.nlp_urdu import fuzzy_canonical
 
 MODEL_NAME = "router.json"
 
@@ -109,6 +112,9 @@ class IntentRouter:
         if not tokens:
             return {}
         vocabulary = set(model.get("vocabulary", []))
+        # v1.4.0: unseen Roman-Urdu spellings ("dhondo", "dhoondho", "dhundho")
+        # fold onto the word the model actually knows instead of scoring OOV.
+        tokens = [_fold_token(token, vocabulary) for token in tokens]
         scores: Dict[str, float] = {}
         oov = math_log(smoothing / max(1, len(vocabulary) or 1))
         for label, prior in priors.items():
@@ -134,7 +140,10 @@ class IntentRouter:
         ("self_trainer", ("learn", "seekho", "retrain", "improve", "top patterns",
                           "kaun sa message chal raha")),
         ("hunter", ("dhoondo", "dhondo", "find", "scrape", "leads lao", "leads chahiye",
-                    "naye client", "search kar", "karachi", "lahore", "islamabad")),
+                    "naye client", "search kar", "karachi", "lahore", "islamabad",
+                    # v1.4.0
+                    "refresh", "purane", "stale", "poora shehar", "full city",
+                    "sare areas", "grid", "dobara check", "update karo")),
         ("platform_whatsapp", ("whatsapp", "wa par", "green app")),
         ("platform_linkedin", ("linkedin", "connection request", "inmail")),
         ("platform_facebook", ("facebook", "fb group", "messenger")),
@@ -159,9 +168,11 @@ class IntentRouter:
 
     def _fallback(self, text: str) -> Tuple[str, float, str]:
         lowered = (text or "").lower()
+        matched = _canonical_text(lowered)
         best, hits = self.FALLBACK, 0
         for label, words in self.KEYWORDS:
-            count = sum(1 for word in words if word in lowered)
+            count = max(sum(1 for word in words if word in lowered),
+                        sum(1 for word in words if word in matched))
             if count > hits:
                 best, hits = label, count
         confidence = 0.25 + 0.15 * hits if hits else 0.1
@@ -192,6 +203,25 @@ ps top df du free uname uptime kill killall which where find findstr grep
 head tail wc sort uniq chmod chown curl wget tar zip unzip
 git python pip pytest node npm
 """.split())
+
+
+_WORD_RE = re.compile(r"[a-z][a-z']+")
+
+
+def _fold_token(token: str, vocabulary: set) -> str:
+    """Map an out-of-vocabulary token onto a known word if the spelling is
+    just a Roman-Urdu variant of it.  Never invents a match: unknown stays
+    unknown (and keeps scoring as OOV)."""
+    if token in vocabulary:
+        return token
+    folded = fuzzy_canonical(token)
+    return folded if folded in vocabulary else token
+
+
+def _canonical_text(text: str) -> str:
+    """Canonical-spelling mirror of ``text`` - same word order, same spaces,
+    so multi-word keywords still match after folding."""
+    return _WORD_RE.sub(lambda m: fuzzy_canonical(m.group(0)), text)
 
 
 def _allowlisted_exes() -> frozenset:

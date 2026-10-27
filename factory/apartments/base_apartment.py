@@ -440,10 +440,23 @@ class BaseApartment:
         return self.write_text(relpath, json.dumps(obj, ensure_ascii=False, indent=1))
 
     def read_json(self, relpath: str, default: Any = None) -> Any:
-        raw = self.read_text(relpath, default=None)
-        if raw is None:
+        """Read a JSON file from the sandbox.
+
+        Missing *or* corrupt files return ``default`` - a half-written
+        checkpoint must never crash a worker that is just asking "where was
+        I?".
+        """
+        try:
+            raw = self.read_text(relpath, default=None)
+        except (FileNotFoundError, PermissionError):
             return default
-        return json.loads(raw)
+        if raw is None or not raw.strip():
+            return default
+        try:
+            return json.loads(raw)
+        except ValueError:
+            self.log("json_corrupt", path=relpath, chars=len(raw))
+            return default
 
     def list_sandbox(self, sub: str = "") -> List[str]:
         base = self.sandbox_path(sub) if sub else self.sandbox

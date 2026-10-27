@@ -17,6 +17,7 @@ daily request budget where the money actually is.
 from __future__ import annotations
 
 import re
+import time
 from typing import Any, Dict, List, Optional
 
 from ...store import default_store
@@ -146,6 +147,98 @@ class HunterAgent(BaseApartment):
             raw = self._import_fallback(city, category, limit)
         return self.save_leads(raw)
 
+    # -------------------------------------------------- area sweep + resume
+    def hunt_city(self, city: str, category: str, limit: int = 30,
+                  areas: Optional[List[str]] = None,
+                  progress=None) -> List[Dict[str, Any]]:
+        """Sweep a city neighbourhood by neighbourhood, resumably.
+
+        A single Maps query only ever exposes the first page of results, so
+        serious scrapers walk a grid.  Here the grid is the city's own area
+        list from ``data/pakistani_cities.json``.  Progress is checkpointed, so
+        an interrupted run (captcha, network drop, Ctrl+Shift+Q) resumes from
+        the next neighbourhood instead of starting over.
+        """
+        scrape = self.tool("scrape")
+        pending = list(areas or scrape.city_areas(city)) or [""]
+        checkpoint = self._checkpoint()
+        key = "%s|%s" % (city.lower(), category.lower())
+        done = set(checkpoint.get(key, {}).get("areas", []))
+        saved: List[Dict[str, Any]] = []
+        for area in pending:
+            if len(saved) >= limit or self.kill_switch():
+                break
+            if area in done:
+                continue
+            if progress:
+                progress("area: %s" % (area or city))
+            batch = self.find_leads(city, category, max(1, limit - len(saved)),
+                                    area=area or None, progress=progress)
+            saved.extend(batch)
+            done.add(area)
+            checkpoint[key] = {"areas": sorted(done), "at": time.time()}
+            self._save_checkpoint(checkpoint)
+        if len(done) >= len(pending):
+            checkpoint.pop(key, None)
+            self._save_checkpoint(checkpoint)
+        return saved
+
+    def _checkpoint(self) -> Dict[str, Any]:
+        return self.read_json("checkpoint.json", default={}) or {}
+
+    def _save_checkpoint(self, data: Dict[str, Any]) -> None:
+        self.write_json("checkpoint.json", data)
+
+    def refresh_stale(self, days: int = 30, limit: int = 20) -> List[Dict[str, Any]]:
+        """Re-check leads older than ``days`` - Google ToS §3.2.3 caps caching.
+
+        Leads whose stored ``scraped_at`` is past the window are re-fetched by
+        place id and their details (phone/website/rating) refreshed.  Returns
+        the leads that changed.
+        """
+        cutoff = time.time() - float(days) * 86400
+        store = default_store()
+        stale = []
+        for lead in store.leads(limit=500):
+            notes = str(lead.get("notes") or "")
+            stamp = 0.0
+            match = re.search(r"scraped_at=([0-9.]+)", notes)
+            if match:
+                try:
+                    stamp = float(match.group(1))
+                except ValueError:
+                    stamp = 0.0
+            if stamp and stamp < cutoff:
+                stale.append(lead)
+        refreshed = []
+        try:
+            maps = self.tool("maps_api")
+        except Exception:
+            maps = None
+        for lead in stale[:limit]:
+            place_id = ""
+            match = re.search(r"place_id=([0-9x:a-fA-F]+)", str(lead.get("notes") or ""))
+            if match:
+                place_id = match.group(1)
+            detail = None
+            if maps and place_id:
+                detail = maps.place(place_id, float(lead.get("lat", 0) or 0),
+                                    float(lead.get("lng", 0) or 0), lead.get("name", ""))
+            if not detail:
+                continue
+            fields = {"phone": detail.get("phone") or lead.get("phone", ""),
+                      "website": detail.get("website") or lead.get("website", ""),
+                      "rating": float(detail.get("rating") or lead.get("rating") or 0),
+                      "reviews": int(detail.get("reviews") or lead.get("reviews") or 0),
+                      "notes": re.sub(r"scraped_at=[0-9.]+", "scraped_at=%.0f" % time.time(),
+                                      str(lead.get("notes") or "")) or
+                      ("scraped_at=%.0f" % time.time())}
+            store.update_fields(int(lead["id"]), **fields)
+            refreshed.append({"lead_id": lead["id"], "name": lead.get("name", ""),
+                              "changed": True})
+        self.log("refreshed_stale", checked=len(stale), refreshed=len(refreshed))
+        return refreshed
+
     def _import_fallback(self, city: str, category: str,
                          limit: int) -> List[Dict[str, Any]]:
         """Offline / blocked: pull from the bundled CSV instead of doing nothing."""
@@ -228,6 +321,10 @@ class HunterAgent(BaseApartment):
                 "score": max(0, min(100, score)),
                 "source": lead.get("source", "hunter"),
             }
+            if lead.get("place_id") or lead.get("scraped_at"):
+                stamp = "scraped_at=%.0f" % float(lead.get("scraped_at") or time.time())
+                extras = ["place_id=%s" % lead["place_id"]] if lead.get("place_id") else []
+                record["notes"] = " ".join([stamp] + extras)
             lead_id = store.upsert_lead(record)
             record["id"] = lead_id
             saved.append(record)
@@ -278,8 +375,23 @@ class HunterAgent(BaseApartment):
                     "Internet permission on kar ke dobara chalaayein to live leads aayengi."
                     % self._summarise(saved))
 
+        lowered = (user_input or "").lower()
+        if any(word in lowered for word in ("refresh", "purane", "stale", "update karo")):
+            refreshed = self.refresh_stale(limit=request["limit"])
+            if not refreshed:
+                return ("Koi lead 30 din se purana nahi hai (ya place_id missing hai). "
+                        "Naye leads ke liye pehle hunt karein.")
+            return "%d purane leads dobara check ho gaye:" % len(refreshed) + "\n" + \
+                "\n".join("  #%s %s" % (row["lead_id"], row["name"][:50]) for row in refreshed)
+
         progress = context.get("progress") if context else None
-        saved = self.find_leads(city, category, request["limit"], request["area"], progress)
+        if request.get("area") or any(word in lowered for word in
+                                      ("poora shehar", "full city", "sare areas", "grid")):
+            saved = self.hunt_city(city, category, request["limit"],
+                                   progress=progress)
+        else:
+            saved = self.find_leads(city, category, request["limit"],
+                                    request["area"], progress)
         if not saved:
             return ("Koi naya lead nahi mila (%s / %s). Ho sakta hai Google ne captcha "
                     "de diya ho - CSV import ka rasta try karein: "

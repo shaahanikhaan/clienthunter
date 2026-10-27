@@ -1,87 +1,269 @@
 {
-  "_comment": "City + neighbourhood data used by apt_hunter to build scrape queries. 'areas' are fed to Google Maps one at a time (a grid), which is how you get depth instead of the same 20 results. Edit freely - add your own city's areas and the hunter will use them on the next run.",
-
+  "_comment": "City + neighbourhood data used by apt_hunter to build scrape queries. 'areas' are fed to Google Maps one at a time (a grid), which is how you get depth instead of the same 20 results. Edit freely - add your own city's areas and the hunter will use them on the next run. lat/lng = approximate city centre, used only to centre the Google Maps search viewport.",
   "default_city": "Karachi",
   "cities": [
     {
-      "name": "Karachi", "urdu": "کراچی", "priority": 1, "density": "very_high",
-      "areas": ["Gulshan-e-Iqbal", "Defence DHA", "Clifton", "Saddar", "North Nazimabad",
-                "Korangi", "PECHS", "Gulistan-e-Jauhar", "Bahadurabad", "Tariq Road",
-                "Hyderi", "FB Area", "Landhi", "Shah Faisal Colony", "Malir", "Nazimabad",
-                "Garden", "Burns Road", "Johar", "Scheme 33"],
-      "notes": "Sab se bara market. Restaurants aur clinics sab se zyada convert hote hain."
+      "name": "Karachi",
+      "urdu": "کراچی",
+      "priority": 1,
+      "density": "very_high",
+      "areas": [
+        "Gulshan-e-Iqbal",
+        "Defence DHA",
+        "Clifton",
+        "Saddar",
+        "North Nazimabad",
+        "Korangi",
+        "PECHS",
+        "Gulistan-e-Jauhar",
+        "Bahadurabad",
+        "Tariq Road",
+        "Hyderi",
+        "FB Area",
+        "Landhi",
+        "Shah Faisal Colony",
+        "Malir",
+        "Nazimabad",
+        "Garden",
+        "Burns Road",
+        "Johar",
+        "Scheme 33"
+      ],
+      "notes": "Sab se bara market. Restaurants aur clinics sab se zyada convert hote hain.",
+      "lat": 24.8607,
+      "lng": 67.0011
     },
     {
-      "name": "Lahore", "urdu": "لاہور", "priority": 1, "density": "very_high",
-      "areas": ["Gulberg", "Defence", "Johar Town", "Model Town", "DHA", "Cantt",
-                "Faisal Town", "Iqbal Town", "Wapda Town", "Garden Town", "Shadman",
-                "Mall Road", "Bahria Town", "Allama Iqbal Town", "Township"],
-      "notes": "Boutiques aur salons strong hain. Design quality matters here."
+      "name": "Lahore",
+      "urdu": "لاہور",
+      "priority": 1,
+      "density": "very_high",
+      "areas": [
+        "Gulberg",
+        "Defence",
+        "Johar Town",
+        "Model Town",
+        "DHA",
+        "Cantt",
+        "Faisal Town",
+        "Iqbal Town",
+        "Wapda Town",
+        "Garden Town",
+        "Shadman",
+        "Mall Road",
+        "Bahria Town",
+        "Allama Iqbal Town",
+        "Township"
+      ],
+      "notes": "Boutiques aur salons strong hain. Design quality matters here.",
+      "lat": 31.5497,
+      "lng": 74.3436
     },
     {
-      "name": "Islamabad", "urdu": "اسلام آباد", "priority": 2, "density": "high",
-      "areas": ["F-6", "F-7", "F-8", "F-10", "F-11", "G-6", "G-8", "G-9", "G-10", "G-11",
-                "Blue Area", "Bahria Town", "DHA", "Chak Shahzad", "I-8", "I-10"],
-      "notes": "Budget zyada, expectations zyada. Premium package pitch karo."
+      "name": "Islamabad",
+      "urdu": "اسلام آباد",
+      "priority": 2,
+      "density": "high",
+      "areas": [
+        "F-6",
+        "F-7",
+        "F-8",
+        "F-10",
+        "F-11",
+        "G-6",
+        "G-8",
+        "G-9",
+        "G-10",
+        "G-11",
+        "Blue Area",
+        "Bahria Town",
+        "DHA",
+        "Chak Shahzad",
+        "I-8",
+        "I-10"
+      ],
+      "notes": "Budget zyada, expectations zyada. Premium package pitch karo.",
+      "lat": 33.6844,
+      "lng": 73.0479
     },
     {
-      "name": "Rawalpindi", "urdu": "راولپنڈی", "priority": 2, "density": "high",
-      "areas": ["Saddar", "Satellite Town", "Commercial Market", "Bahria Town", "DHA",
-                "Chaklala", "Westridge", "Peshawar Road", "Muree Road", "Gulzar-e-Quaid"],
-      "notes": "Price-sensitive. Basic/Recommended packages convert best."
+      "name": "Rawalpindi",
+      "urdu": "راولپنڈی",
+      "priority": 2,
+      "density": "high",
+      "areas": [
+        "Saddar",
+        "Satellite Town",
+        "Commercial Market",
+        "Bahria Town",
+        "DHA",
+        "Chaklala",
+        "Westridge",
+        "Peshawar Road",
+        "Muree Road",
+        "Gulzar-e-Quaid"
+      ],
+      "notes": "Price-sensitive. Basic/Recommended packages convert best.",
+      "lat": 33.5651,
+      "lng": 73.0169
     },
     {
-      "name": "Faisalabad", "urdu": "فیصل آباد", "priority": 3, "density": "medium",
-      "areas": ["D Ground", "Peoples Colony", "Ghulam Muhammad Abad", "Jinnah Colony",
-                "Samundri Road", "Canal Road", "Susan Road", "Kohinoor City"],
-      "notes": "Manufacturing + wholesale. B2B sites convert well."
+      "name": "Faisalabad",
+      "urdu": "فیصل آباد",
+      "priority": 3,
+      "density": "medium",
+      "areas": [
+        "D Ground",
+        "Peoples Colony",
+        "Ghulam Muhammad Abad",
+        "Jinnah Colony",
+        "Samundri Road",
+        "Canal Road",
+        "Susan Road",
+        "Kohinoor City"
+      ],
+      "notes": "Manufacturing + wholesale. B2B sites convert well.",
+      "lat": 31.4504,
+      "lng": 73.135
     },
     {
-      "name": "Multan", "urdu": "ملتان", "priority": 3, "density": "medium",
-      "areas": ["Gulgasht Colony", "Cantt", "Bosan Road", "Shah Rukn-e-Alam", "New Multan",
-                "Multan Cantt", "Kachehri Chowk"],
-      "notes": "Restaurants aur clinics."
+      "name": "Multan",
+      "urdu": "ملتان",
+      "priority": 3,
+      "density": "medium",
+      "areas": [
+        "Gulgasht Colony",
+        "Cantt",
+        "Bosan Road",
+        "Shah Rukn-e-Alam",
+        "New Multan",
+        "Multan Cantt",
+        "Kachehri Chowk"
+      ],
+      "notes": "Restaurants aur clinics.",
+      "lat": 30.1575,
+      "lng": 71.5249
     },
     {
-      "name": "Peshawar", "urdu": "پشاور", "priority": 3, "density": "medium",
-      "areas": ["Saddar", "University Road", "Hayatabad", "Dabgari", "Khyber Bazaar",
-                "Gulbahar", "Warsak Road"],
-      "notes": "Automotive aur electronics shops."
+      "name": "Peshawar",
+      "urdu": "پشاور",
+      "priority": 3,
+      "density": "medium",
+      "areas": [
+        "Saddar",
+        "University Road",
+        "Hayatabad",
+        "Dabgari",
+        "Khyber Bazaar",
+        "Gulbahar",
+        "Warsak Road"
+      ],
+      "notes": "Automotive aur electronics shops.",
+      "lat": 34.0151,
+      "lng": 71.5805
     },
     {
-      "name": "Quetta", "urdu": "کوئٹہ", "priority": 4, "density": "low",
-      "areas": ["Jinnah Road", "Satellite Town", "Samungli Road", "Shahrah-e-Iqbal"],
-      "notes": "Kam competition - outreach ka response rate acha hai."
+      "name": "Quetta",
+      "urdu": "کوئٹہ",
+      "priority": 4,
+      "density": "low",
+      "areas": [
+        "Jinnah Road",
+        "Satellite Town",
+        "Samungli Road",
+        "Shahrah-e-Iqbal"
+      ],
+      "notes": "Kam competition - outreach ka response rate acha hai.",
+      "lat": 30.1798,
+      "lng": 66.975
     },
     {
-      "name": "Sialkot", "urdu": "سیالکوٹ", "priority": 3, "density": "medium",
-      "areas": ["Saddar", "Paris Road", "Kashmir Road", "Khadim Ali Road"],
-      "notes": "Export businesses - English sites, international clients."
+      "name": "Sialkot",
+      "urdu": "سیالکوٹ",
+      "priority": 3,
+      "density": "medium",
+      "areas": [
+        "Saddar",
+        "Paris Road",
+        "Kashmir Road",
+        "Khadim Ali Road"
+      ],
+      "notes": "Export businesses - English sites, international clients.",
+      "lat": 32.4945,
+      "lng": 74.5229
     },
     {
-      "name": "Gujranwala", "urdu": "گوجرانوالہ", "priority": 4, "density": "medium",
-      "areas": ["GT Road", "Saddar", "Model Town", "Wapda Town"],
-      "notes": "Manufacturing + retail."
+      "name": "Gujranwala",
+      "urdu": "گوجرانوالہ",
+      "priority": 4,
+      "density": "medium",
+      "areas": [
+        "GT Road",
+        "Saddar",
+        "Model Town",
+        "Wapda Town"
+      ],
+      "notes": "Manufacturing + retail.",
+      "lat": 32.1877,
+      "lng": 74.1945
     },
     {
-      "name": "Hyderabad", "urdu": "حیدرآباد", "priority": 4, "density": "medium",
-      "areas": ["Saddar", "Latifabad", "Qasimabad", "Auto Bhan Road"],
-      "notes": "Retail + clinics."
+      "name": "Hyderabad",
+      "urdu": "حیدرآباد",
+      "priority": 4,
+      "density": "medium",
+      "areas": [
+        "Saddar",
+        "Latifabad",
+        "Qasimabad",
+        "Auto Bhan Road"
+      ],
+      "notes": "Retail + clinics.",
+      "lat": 25.396,
+      "lng": 68.3763
     },
     {
-      "name": "Bahawalpur", "urdu": "بہاولپور", "priority": 5, "density": "low",
-      "areas": ["Saddar", "Model Town", "Cantt", "Circular Road"],
-      "notes": "Kam competition."
+      "name": "Bahawalpur",
+      "urdu": "بہاولپور",
+      "priority": 5,
+      "density": "low",
+      "areas": [
+        "Saddar",
+        "Model Town",
+        "Cantt",
+        "Circular Road"
+      ],
+      "notes": "Kam competition.",
+      "lat": 29.3956,
+      "lng": 71.6836
     },
     {
-      "name": "Sargodha", "urdu": "سرگودھا", "priority": 5, "density": "low",
-      "areas": ["Saddar", "University Road", "Fatima Jinnah Road"],
-      "notes": "Agriculture-adjacent businesses."
+      "name": "Sargodha",
+      "urdu": "سرگودھا",
+      "priority": 5,
+      "density": "low",
+      "areas": [
+        "Saddar",
+        "University Road",
+        "Fatima Jinnah Road"
+      ],
+      "notes": "Agriculture-adjacent businesses.",
+      "lat": 32.0836,
+      "lng": 72.6711
     },
     {
-      "name": "Abbottabad", "urdu": "ایبٹ آباد", "priority": 5, "density": "low",
-      "areas": ["Supply Bazaar", "Mansehra Road", "College Road"],
-      "notes": "Tourism + guest houses."
+      "name": "Abbottabad",
+      "urdu": "ایبٹ آباد",
+      "priority": 5,
+      "density": "low",
+      "areas": [
+        "Supply Bazaar",
+        "Mansehra Road",
+        "College Road"
+      ],
+      "notes": "Tourism + guest houses.",
+      "lat": 34.1688,
+      "lng": 73.2215
     }
   ]
 }

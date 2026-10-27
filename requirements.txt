@@ -1,4 +1,4 @@
-# ClientHunter Factory v1.3.0 - optional dependencies
+# ClientHunter Factory v1.4.0 - optional dependencies
 #
 # The factory runs with ZERO of these installed: every module falls back to a
 # pure standard-library implementation.  Install only what you want to

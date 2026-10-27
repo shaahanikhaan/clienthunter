@@ -1,4 +1,4 @@
-# POWER GUIDE - ClientHunter Factory v1.3.0
+# POWER GUIDE - ClientHunter Factory v1.4.0
 
 "Jo sab se powerfull ho." This file records what was researched, what was
 chosen, what was **rejected and why**, and how to use the parts that give you
@@ -24,12 +24,31 @@ money:**
 * Google Maps ToS §3.2.3 also caps how long you may **cache** Places content
   (**30 days**; Place IDs are exempt). Any scraper has to refresh or purge.
 
-So the hunter uses a **hand-written Chrome DevTools Protocol scraper**
-(`factory/apartments/tools/scrape.py`) driving *your* Chrome on *your* Google
-account. Legally this is the safer route too: scraping public data is not a
-CFAA violation (*hiQ Labs v. LinkedIn*, 9th Cir. 2022), though it does conflict
-with Maps' Terms of Service - which is why the factory honours `robots.txt`,
-throttles to **1 request / 2 seconds**, and keeps a **30-day refresh** rule.
+So the hunter has **two keyless tiers** and uses whichever answers:
+
+1. **Tier 1 - endpoint client** (`factory/apartments/tools/maps_api.py`):
+   plain HTTPS against the same public Maps endpoints the Maps UI itself calls
+   (`/search?tbm=map` for area listings, `/maps/preview/place` for details).
+   No API key, no Chrome, no Docker, ~2 s between requests. Backends are tried
+   in order: `httpcloak` (25 MB, 0 dependencies) if installed → `curl_cffi` →
+   **stdlib `urllib`**, which always works. It warms up on `google.com` and
+   `/maps` first (cookies/consent), detects consent and sign-in walls and
+   429/503, and backs off exponentially instead of hammering.
+2. **Tier 2 - Chrome/CDP** (`scrape.py`): drives *your* Chrome on *your*
+   Google account when tier 1 gets walled. Same data, slower, more RAM.
+
+Legally this is the safer route too: scraping public data is not a CFAA
+violation (*hiQ Labs v. LinkedIn*, 9th Cir. 2022), though it does conflict with
+Maps' Terms of Service - which is why the factory honours `robots.txt`,
+throttles to **1 request / 2 seconds**, and keeps a **30-day refresh** rule
+(`hunter.refresh_stale()`).
+
+A single Maps query only ever exposes page 1, which is why serious scrapers
+walk a grid. The hunter walks **neighbourhoods** from
+`factory/data/pakistani_cities.json` (every city now carries real `lat`/`lng`
+plus its area list), checkpoints each finished area in
+`apartments/apt_hunter/memory/checkpoint.json`, and resumes where it stopped
+after a captcha, a network drop or Ctrl+Shift+Q.
 
 Everything else is keyless by construction:
 
@@ -39,10 +58,31 @@ Everything else is keyless by construction:
 | Email | IMAP/SMTP + Gmail **App Password** | None |
 | WhatsApp | `waeys` (pure-Python Baileys) or WhatsApp Web over CDP | None |
 | GitHub | `git-credential-oauth` (browser OAuth) | No PAT, no SSH key |
-| Maps leads | CDP scraper | None |
+| Maps leads | keyless endpoint client (tier 1) + CDP scraper (tier 2) | None |
+| MX / deliverability | hand-rolled DNS client in `verify.py` (UDP, stdlib) | None |
+| Send-time optimisation | `factory/scheduler.py` (pure `datetime`) | None |
 | LLM | Hand-written n-gram / logistic models (JSON) | None |
 
 **If you ever see this project asking for an API key, it is not this project.**
+
+---
+
+## 1b. What v1.4.0 added, and why it is dependency-free
+
+| New capability | Implementation | Verdict on the obvious library |
+|---|---|---|
+| Keyless Maps scraping | `tools/maps_api.py` - pb-blob URL maths, XSSI stripping, shape-based payload parsing | Best GitHub reference (`worldscraping/google-maps-scraper`, 102★) reimplemented; the 1.9k-star kit is Docker-only and unusable here |
+| TLS fingerprinting | optional `httpcloak` (25 MB, **0 deps**) → `curl_cffi` (260 MB) → stdlib `urllib` | Never a hard requirement - stdlib path always works |
+| MX / email verification | `tools/verify.py` - a real DNS client (compression pointers, MX/A/AAAA/TXT) written on `socket` | `dnspython` not needed; `email-validator` does syntax only, not deliverability |
+| Phone + WhatsApp eligibility | Pakistani mobile-prefix table (30 Jazz … 49 Ufone) | `phonenumbers` (2.6 MB, 0 deps) used **if installed**, stdlib rules otherwise |
+| Send-time windows | `factory/scheduler.py` - Karachi clock via `zoneinfo`, fixed UTC+5 fallback on Windows | No library does Pakistani business hours (Jummah, Ramadan) |
+| Roman-Urdu spelling | phonetic consonant skeletons + edit-distance fallback in `tools/nlp_urdu.py` | `urduhack` ★309 but **stale (last push Jan 2024)**; `jev-urdu` needs torch ≈ 2 GB |
+| Chrome stealth | launch flags + `Page.addScriptToEvaluateOnNewDocument` scrub | `CDP-Patches` ★163 is **GPL** and its README says Chrome 142+ fixed the Input leak; `nodriver` is **AGPL-3.0** - both avoided |
+| WhatsApp | unchanged: WhatsApp Web over CDP | Python Baileys ports are immature (`pyaileys` ★3, `WAeys` ★2) - not worth the risk |
+
+Prove any of it offline::
+
+    python -m factory.selftest        # 78 checks, no network, no Chrome
 
 ---
 
@@ -67,6 +107,13 @@ Every candidate was checked against PyPI and GitHub. Honest results:
 | `Neura-X` | **No** | 404 on PyPI. Only a 1-star GitHub repo. No code |
 | `SLM Forge` | **No** | 404 on PyPI. Same story |
 | `google-maps-scraper-kit` (1.9k stars) | Yes | **Not usable** - requires Docker, which the spec forbids. Its technique was reimplemented in-house |
+| `nodriver` 0.50.99 (4.9k stars) | Yes | **Avoided** - AGPL-3.0. Optional tier-2 only |
+| `CDP-Patches` (163 stars) | Yes | **Avoided** - GPL, and its author's README says the CDP Input leak is fixed in Chrome Stable 142+ |
+| `urduhack` (309 stars) | Yes | **Stale** - last push 2024-01-04. Hand-written NLP kept |
+| `httpcloak` 1.7.3 | Yes | **Used if installed** - 25 MB wheel, **0 dependencies**, real TLS fingerprint |
+| `curl_cffi` 0.17.0 | Yes | Optional tier-2 - 260 MB wheel |
+| `phonenumbers` 9.0.42 | Yes | **Used if installed** - 2.6 MB, 0 dependencies |
+| `imap-tools` 1.16.0 | Yes | Optional tier-2 for inbox work - 0 dependencies |
 
 **Consequence:** every trainer is hand-written pure Python (Naive Bayes,
 logistic regression, TF-IDF, n-grams). That is not a compromise - it is what
@@ -209,12 +256,27 @@ On screen, all live, no placeholders:
 * Leads by stage + the 8 most recent
 * Machine: RAM, disk, CPU count, Python, platform, detected shells
 * Terminal card with PowerShell / CMD / bash selector
+* **Send windows** - the Karachi clock, every channel's current verdict
+  (send / wait), the next slot, and the day's windows
+* **Deliverability** - type any address or number and get a live verdict
+  (MX record found, operator, WhatsApp eligibility, score) with the counters
+  of what has actually been checked
 * Audit log tail (hash-chained)
 * EMERGENCY STOP button, per-agent pause/resume/restart
 
 API: `GET /api/state`, `GET /events` (SSE), `POST /api/intent`,
 `POST /api/command`, `POST /api/control`, `POST /api/kill`, `POST /api/train`,
-`POST /api/submit`.
+`POST /api/verify`, `POST /api/submit`.
+
+```powershell
+# live deliverability check, no API key
+Invoke-RestMethod -Uri http://127.0.0.1:8000/api/verify `
+  -Method Post -ContentType 'application/json' `
+  -Body '{"contact":"info@bundukhan.pk"}'
+# -> {"result":{"email":"info@bundukhan.pk","mx":["mail.bundukhan.pk",
+#     "server.bundukhan.pk"],"mx_ok":true,"score":1.0,"sendable":true,
+#     "reasons":["standard business mailbox","own domain","MX: mail.bundukhan.pk"]}}
+```
 
 ---
 
@@ -238,6 +300,18 @@ python -m factory.orchestrator --offline
 
 # backup + SHA-256 verify + chain check
 python -m factory.orchestrator --backup
+
+# 78 offline assertions (parser, DNS, scheduler, Roman-Urdu, stealth)
+python -m factory.selftest
+
+# sweep every neighbourhood of a city, resumably
+python -m factory.orchestrator "poora karachi restaurants dhoondo 40"
+
+# re-verify leads older than Google's 30-day cache limit
+python -m factory.orchestrator "purane leads refresh karo"
+
+# force-send even outside a reply window (otherwise it defers)
+python -m factory.orchestrator --agent outreach "force message bhejo 5"
 
 # audit trail
 python -m factory.orchestrator --audit

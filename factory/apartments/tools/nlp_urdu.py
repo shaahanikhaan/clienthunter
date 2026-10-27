@@ -82,6 +82,64 @@ _ROMAN_VARIANTS = {
     "call": "call", "phone": "call", "callback": "call",
     "time": "time", "waqt": "time", "timing": "time",
     "jid": "jaldi", "jaldi": "jaldi", "jldi": "jaldi", "urgent": "jaldi",
+    # ---- v1.4.0: lead-generation vocabulary ------------------------------
+    "dhoondo": "dhoondho", "dhondo": "dhoondho", "dhundho": "dhoondho",
+    "dhundho": "dhoondho", "dhoondho": "dhoondho", "dhundo": "dhoondho",
+    "dhoond": "dhoondho", "dhond": "dhoondho", "find": "dhoondho",
+    "search": "dhoondho", "khojo": "dhoondho", "dhoondain": "dhoondho",
+    "talash": "dhoondho", "talashkaro": "dhoondho", "lookup": "dhoondho",
+    "client": "client", "clients": "client", "customer": "client",
+    "customers": "client", "customerz": "client", "kilent": "client",
+    "graahak": "client", "grahak": "client", "gahak": "client",
+    "leads": "lead", "lead": "lead", "lid": "lead", "leed": "lead",
+    "prospect": "lead", "prospects": "lead",
+    "business": "business", "businesses": "business", "biz": "business",
+    "karobar": "business", "kaarobar": "business", "bizness": "business",
+    "company": "company", "companyion": "company", "companies": "company",
+    "branch": "branch", "branches": "branch", "brnch": "branch",
+    "clinic": "clinic", "clinics": "clinic", "kilnic": "clinic",
+    "hospital": "hospital", "haspatal": "hospital", "hospitalz": "hospital",
+    "restaurant": "restaurant", "restaurants": "restaurant",
+    "restaurent": "restaurant", "resturant": "restaurant",
+    "hotel": "hotel", "hotels": "hotel", "hotl": "hotel",
+    "school": "school", "schoolz": "school", "skool": "school",
+    "gym": "gym", "jim": "gym", "gyms": "gym",
+    "shop": "shop", "shops": "shop", "dukaan": "shop", "dukan": "shop",
+    "salon": "salon", "sallon": "salon", "parlour": "salon", "parlor": "salon",
+    "pharmacy": "pharmacy", "medical": "pharmacy", "medicalstore": "pharmacy",
+    "dawakhana": "pharmacy", "chemist": "pharmacy",
+    "realestate": "real_estate", "property": "real_estate",
+    "proprety": "real_estate", "plot": "real_estate", "plots": "real_estate",
+    "builder": "real_estate", "builders": "real_estate",
+    "contractor": "contractor", "thekedar": "contractor", "thkedar": "contractor",
+    "email": "email", "emails": "email", "emial": "email", "mail": "email",
+    "e-mail": "email", "emailid": "email", "imel": "email",
+    "whatsapp": "whatsapp", "whatsap": "whatsapp", "watsap": "whatsapp",
+    "whtsp": "whatsapp", "wp": "whatsapp", "wsapp": "whatsapp",
+    "message": "message", "msg": "message", "messge": "message",
+    "paigham": "message", "sms": "message",
+    "number": "number", "num": "number", "no.": "number", "nmbr": "number",
+    "mobile": "mobile", "mob": "mobile", "cell": "mobile", "mobail": "mobile",
+    "contact": "contact", "kontact": "contact", "rabta": "contact",
+    "proposal": "proposal", "propsal": "proposal", "quotes": "quote",
+    "quotation": "quote", "quotations": "quote", "ratecard": "quote",
+    "report": "report", "rprt": "report", "reprot": "report",
+    "bhejein": "bhej", "bhejna": "bhej", "bhejdo": "bhej", "sendkaro": "bhej",
+    "bhejo": "bhej", "bhj": "bhej", "bhejj": "bhej",
+    "followup": "followup", "follow-up": "followup", "follow": "followup",
+    "reminder": "reminder", "yad": "reminder", "yaad": "reminder",
+    "meeting": "meeting", "mulaqat": "meeting", "mulaakat": "meeting",
+    "paisay": "paisay", "paisa": "paisay", "rupee": "paisay", "rupay": "paisay",
+    "budget": "budget", "bajat": "budget", "bijat": "budget",
+    "karachi": "karachi", "krachi": "karachi", "khi": "karachi", "karchi": "karachi",
+    "lahore": "lahore", "lhr": "lahore", "lahor": "lahore",
+    "islamabad": "islamabad", "isb": "islamabad", "isl": "islamabad",
+    "rawalpindi": "rawalpindi", "pindi": "rawalpindi", "rwp": "rawalpindi",
+    "faisalabad": "faisalabad", "lyallpur": "faisalabad", "fsd": "faisalabad",
+    "multan": "multan", "peshawar": "peshawar", "pindiroad": "peshawar",
+    "quetta": "quetta", "sialkot": "sialkot", "gujranwala": "gujranwala",
+    "hyderabad": "hyderabad", "bahawalpur": "bahawalpur", "sargodha": "sargodha",
+    "abbottabad": "abbottabad", "abottabad": "abbottabad",
 }
 
 _URDU_RANGE = re.compile(r"[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]")
@@ -202,9 +260,114 @@ def stem(token: str) -> str:
     return lowered
 
 
+#: Consonant clusters that Roman Urdu spells a dozen different ways.
+#: ``ph``/``f``, ``kh``/``x``, ``dh``/``d`` ... collapse to one symbol so that
+#: "dhoondo", "dhondo", "dhundho" and "dhoondho" share a key.
+_DIGRAPHS = (("ph", "f"), ("gh", "g"), ("kh", "x"), ("dh", "d"),
+             ("th", "t"), ("bh", "b"), ("ch", "c"), ("sh", "s"),
+             ("zh", "z"), ("rh", "r"), ("wh", "w"))
+#: Letters that Roman Urdu writers swap freely.
+_SWAPS = (("q", "k"), ("z", "s"), ("c", "k"), ("x", "k"))
+_VOWELS_RE = re.compile(r"[aeiouy]")
+_DUP_RE = re.compile(r"(.)\1+")
+_NON_LATIN_RE = re.compile(r"[^a-z]")
+
+#: skeleton -> canonical, built lazily from the variant table.
+_SKELETON_INDEX: Dict[str, str] = {}
+
+
+def skeleton(token: str) -> str:
+    """Phonetic consonant skeleton - the fuzzy key behind Roman Urdu spelling.
+
+    >>> skeleton("dhoondo"), skeleton("dhondo"), skeleton("dhundho")
+    ('dnd', 'dnd', 'dnd')
+    """
+    text = _NON_LATIN_RE.sub("", str(token).lower())
+    if not text:
+        return ""
+    for pair, single in _DIGRAPHS:
+        text = text.replace(pair, single)
+    for src, dst in _SWAPS:
+        text = text.replace(src, dst)
+    text = _VOWELS_RE.sub("", text)
+    text = _DUP_RE.sub(r"\1", text)
+    return text
+
+
+def _build_skeleton_index() -> Dict[str, str]:
+    index: Dict[str, str] = {}
+    for variant, canonical in _ROMAN_VARIANTS.items():
+        key = skeleton(variant)
+        if key and key not in index:
+            index[key] = canonical
+    return index
+
+
+def _edit_distance(left: str, right: str) -> int:
+    """Levenshtein distance, iterative (no recursion, no heap blow-ups)."""
+    if left == right:
+        return 0
+    if not left:
+        return len(right)
+    if not right:
+        return len(left)
+    previous = list(range(len(right) + 1))
+    for i, left_char in enumerate(left, 1):
+        current = [i]
+        for j, right_char in enumerate(right, 1):
+            cost = 0 if left_char == right_char else 1
+            current.append(min(previous[j] + 1, current[j - 1] + 1,
+                               previous[j - 1] + cost))
+        previous = current
+    return previous[-1]
+
+
+def fuzzy_canonical(token: str, max_distance: int = 1) -> str:
+    """Fold an *unknown* spelling to the closest known canonical word.
+
+    Three passes, cheapest first: exact table, identical phonetic skeleton,
+    then a one-edit fallback.  Returns the input unchanged when nothing is
+    close - the caller keeps the raw token rather than inventing a match.
+    """
+    lowered = str(token).lower()
+    if lowered in _ROMAN_VARIANTS:
+        return _ROMAN_VARIANTS[lowered]
+    if not _SKELETON_INDEX:
+        _SKELETON_INDEX.update(_build_skeleton_index())
+    key = skeleton(lowered)
+    # Skeletons shorter than 4 consonants collide far too often ("xyzzy" and
+    # "kese" both fold to "ks"), so they only ever match the exact table.
+    if not key or len(key) < 4:
+        return lowered
+    if key in _SKELETON_INDEX:
+        return _SKELETON_INDEX[key]
+    if max_distance > 0 and len(key) >= 4:
+        best, best_distance = "", max_distance + 1
+        for candidate, canonical in _SKELETON_INDEX.items():
+            if abs(len(candidate) - len(key)) > max_distance:
+                continue
+            distance = _edit_distance(key, candidate)
+            if distance < best_distance:
+                best, best_distance = canonical, distance
+        if best and best_distance <= max_distance:
+            return best
+    return lowered
+
+
 def canonical_roman(token: str) -> str:
     """Fold a Roman Urdu spelling variant to its canonical form."""
-    return _ROMAN_VARIANTS.get(token.lower(), token.lower())
+    return fuzzy_canonical(token)
+
+
+def spellcheck_tokens(tokens: Sequence[str]) -> List[str]:
+    """Canonicalise a token list (used before keyword/intent matching)."""
+    return [fuzzy_canonical(token) for token in tokens]
+
+
+def variants_of(canonical: str) -> List[str]:
+    """Every spelling in the table that folds to ``canonical`` (for corpora)."""
+    return sorted(variant for variant, target in _ROMAN_VARIANTS.items()
+                  if target == canonical)
 
 
 # --------------------------------------------------------------------------- #

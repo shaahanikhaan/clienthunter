@@ -21,6 +21,7 @@ from __future__ import annotations
 import json
 import re
 import time
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from ...store import default_store
@@ -88,26 +89,38 @@ class FollowupAgent(BaseApartment):
         ids = []
         for index, day in enumerate(days[:int(timing.get("max_touches", 6))]):
             angle = VALUE_ANGLES[index % len(VALUE_ANGLES)]
-            due = self._next_due(day, hour)
+            due = self._next_due(day, hour, lead_id)
             ids.append(store.schedule_followup(int(lead_id), due, index + 1,
                                                 angle["angle"], "", "whatsapp"))
         self.log("sequence_scheduled", lead_id=lead_id, touches=len(ids))
         return ids
 
-    @staticmethod
-    def _next_due(days: int, hour: int) -> float:
-        target = time.time() + days * 86400
-        local = time.localtime(target)
-        target = time.mktime((local.tm_year, local.tm_mon, local.tm_mday,
-                              int(hour), 0, 0, local.tm_wday, local.tm_yday, local.tm_dst))
-        return target
+    def _next_due(self, days: int, hour: int, lead_id: Any = None) -> float:
+        """Due date = the day; the *hour* comes from the send-time scheduler.
+
+        Everything is computed in Karachi time (``factory.scheduler``), so a
+        follow-up lands in a real reply window instead of 11:00 on whatever
+        clock the machine happens to keep.
+        """
+        try:
+            from datetime import timedelta
+            from ...scheduler import best_time, now
+            return best_time("whatsapp", lead_id=lead_id,
+                             moment=now() + timedelta(days=int(days)))
+        except Exception:
+            target = time.time() + days * 86400
+            local = time.localtime(target)
+            return time.mktime((local.tm_year, local.tm_mon, local.tm_mday,
+                                int(hour), 0, 0, local.tm_wday, local.tm_yday,
+                                local.tm_isdst))
 
     def schedule_followup(self, lead_id: int, days: int = 3,
                           angle: str = "second_audit_finding") -> int:
         store = default_store()
         timing = self.timing()
         hour = (timing.get("best_hours") or [11])[0]
-        return store.schedule_followup(int(lead_id), self._next_due(days, hour),
+        return store.schedule_followup(int(lead_id),
+                                       self._next_due(days, hour, lead_id),
                                        1, angle, "", "whatsapp")
 
     # ---------------------------------------------------------------- compose

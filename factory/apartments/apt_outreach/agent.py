@@ -283,8 +283,25 @@ class OutreachAgent(BaseApartment):
             message = "Salam, %s ke bare mein: %s" % (lead["name"], message)
         return self.enforce_limits(message, "whatsapp")
 
-    def run_batch(self, limit: int = 20) -> List[Dict[str, Any]]:
-        """Contact the best-scoring leads that have not been touched yet."""
+    # ------------------------------------------------------------ send timing
+    def timing_ok(self, channel: str = "whatsapp", category: str = "",
+                  force: bool = False) -> Tuple[bool, str]:
+        """Should a message go out *now*?  Uses factory.scheduler windows."""
+        if force:
+            return True, "forced by user"
+        try:
+            from ...scheduler import should_send_now
+            return should_send_now(channel, category)
+        except Exception:
+            return True, "scheduler unavailable - sending anyway"
+
+    def run_batch(self, limit: int = 20, force: bool = False) -> List[Dict[str, Any]]:
+        """Contact the best-scoring leads that have not been touched yet.
+
+        v1.4.0: honours the send-time windows.  Outside a window the batch is
+        reported as *deferred* with the next good slot instead of being fired
+        into the void (a message at 3 am burns the lead *and* the number).
+        """
         store = default_store()
         candidates = [lead for lead in store.leads(stage="new", limit=200)
                       if lead.get("phone") or lead.get("email")]
@@ -293,6 +310,13 @@ class OutreachAgent(BaseApartment):
         for lead in candidates[:limit]:
             if self.kill_switch():
                 break
+            channel = "whatsapp" if lead.get("phone") else "email"
+            ok, reason = self.timing_ok(channel, lead.get("category", ""), force)
+            if not ok:
+                results.append({"lead": lead.get("name"), "ok": False,
+                                "queued": True, "channel": channel,
+                                "reason": "deferred: %s" % reason})
+                continue
             try:
                 results.append(self.contact(lead))
             except Exception as exc:
@@ -329,7 +353,8 @@ class OutreachAgent(BaseApartment):
             return "\n\n".join(blocks) or ("Audit pehle chalayein - outreach audit finding "
                                            "ke baghair nahi bhejta.")
 
-        results = self.run_batch(limit=limit)
+        force = any(word in text for word in ("force", "abhi", "majboor", "now"))
+        results = self.run_batch(limit=limit, force=force)
         sent = sum(1 for r in results if r.get("ok"))
         queued = sum(1 for r in results if r.get("queued"))
         lines = ["Outreach: %d attempts, %d sent, %d queued (offline/approval pending)."
@@ -341,8 +366,8 @@ class OutreachAgent(BaseApartment):
                                              result.get("reason", "")[:60]))
         return "\n".join(lines)
 
-    def run(self, limit: int = 20) -> List[Dict[str, Any]]:
-        return self.run_batch(limit=limit)
+    def run(self, limit: int = 20, force: bool = False) -> List[Dict[str, Any]]:
+        return self.run_batch(limit=limit, force=force)
 
 
 def _opens_with_pitch(message: str) -> bool:

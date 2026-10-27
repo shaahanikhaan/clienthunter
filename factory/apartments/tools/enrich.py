@@ -240,6 +240,13 @@ class EnrichTool:
             merged.update(socials)
             result["socials"] = merged
 
+        # deliverability: is this address/phone actually reachable?
+        result["verify"] = self.verify_lead(emails, result["phones"], website)
+        if result["verify"].get("best_email") and not result["email"]:
+            result["email"] = result["verify"]["best_email"]
+        if result["verify"].get("best_phone") and not result["phones"]:
+            result["phones"] = [result["verify"]["best_phone"]]
+
         self.stats["fetched"] += 1
         self.stats["emails"] += 1 if result["email"] else 0
         self.stats["phones"] += len(result["phones"])
@@ -247,6 +254,27 @@ class EnrichTool:
         self.apartment.log("enrich", lead=lead.get("name", ""), site=website,
                            email=result["email"], status=result["site_status"])
         return result
+
+    # ------------------------------------------------------------ deliverability
+    def verify_lead(self, emails: Optional[Sequence[str]] = None,
+                    phones: Optional[Sequence[str]] = None,
+                    website: str = "") -> Dict[str, Any]:
+        """Score every contact path so outreach never wastes a slot on a dud.
+
+        Pure-Python/no-API: MX lookup over a hand-rolled DNS client, PK mobile
+        prefix rules for WhatsApp eligibility, disposable/role-mailbox lists.
+        """
+        try:
+            verify = self.apartment.tool("verify")
+        except Exception:
+            return {"available": False}
+        report = verify.score_lead(emails or [], phones or [], website)
+        report["available"] = True
+        self.apartment.log(
+            "verify", emails=len(report.get("emails") or []),
+            sendable=len(report.get("sendable_emails") or []),
+            whatsapp=len(report.get("whatsapp_numbers") or []))
+        return report
 
     # ------------------------------------------------------- optional tier two
     def _coldreach_available(self) -> bool:  # pragma: no cover

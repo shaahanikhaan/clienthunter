@@ -483,8 +483,22 @@ class BrowserTool:
             "--remote-debugging-port=%d" % self.port,
             "--user-data-dir=%s" % self.profile,
             "--no-first-run", "--no-default-browser-check",
+            # ---- v1.4.0 stealth -------------------------------------------
+            # CDP's own Input-domain leak was fixed in Chrome Stable 142+, so
+            # the old `cdp-patches` style leaks no longer need patching; the
+            # remaining tells are the automation flags and a fresh profile.
             "--disable-blink-features=AutomationControlled",
-            "--disable-features=Translate,OptimizationHints",
+            "--disable-features=Translate,OptimizationHints,"
+            "AutomationControlled,IsolateOrigins,site-per-process",
+            "--exclude-switches=enable-automation",
+            "--disable-infobars",
+            "--disable-dev-shm-usage",                 # 4 GB box, saves RAM
+            "--disable-background-networking",
+            "--disable-component-update",
+            "--disable-sync",
+            "--no-service-autorun",
+            "--password-store=basic",
+            "--profile-directory=Default",
             "--window-size=1440,900",
         ]
         if self.headless:
@@ -565,6 +579,38 @@ class BrowserTool:
         except Exception:
             return []
 
+    STEALTH_JS = """
+    // v1.4.0 - remove the automation tells that Chrome flags alone do not fix.
+    Object.defineProperty(Navigator.prototype, 'webdriver', {get: () => undefined});
+    if (!window.chrome) { window.chrome = {runtime: {}, app: {isInstalled: false}}; }
+    Object.defineProperty(Navigator.prototype, 'plugins', {
+      get: () => [1, 2, 3, 4, 5].map(function () {
+        return {name: 'PDF Viewer',filename: 'internal-pdf-viewer',
+                description: 'Portable Document Format'};
+      })});
+    Object.defineProperty(Navigator.prototype, 'languages',
+      {get: () => ['en-US', 'en', 'ur-PK', 'ur']});
+    Object.defineProperty(Navigator.prototype, 'hardwareConcurrency', {get: () => 4});
+    Object.defineProperty(Navigator.prototype, 'deviceMemory', {get: () => 4});
+    const _q = window.navigator.permissions && window.navigator.permissions.query;
+    if (_q) {
+      window.navigator.permissions.query = (p) =>
+        p && p.name === 'notifications'
+          ? Promise.resolve({state: Notification.permission})
+          : _q(p);
+    }
+    """
+
+    def harden(self, session: "CdpSession") -> bool:
+        """Inject the stealth script before any page JS runs (best-effort)."""
+        try:
+            session.call("Page.addScriptToEvaluateOnNewDocument",
+                         {"source": self.STEALTH_JS}, timeout=5)
+            return True
+        except Exception as exc:
+            self.apartment.log("stealth_inject_failed", error=str(exc)[:120])
+            return False
+
     def new_tab(self, url: str = "about:blank") -> Optional[CdpSession]:
         """Open a fresh tab and return a session bound to it."""
         self.apartment.require("browser")
@@ -586,6 +632,7 @@ class BrowserTool:
             self.apartment.log("tab_connect_failed", error=str(exc))
             return None
         self._sessions[target.get("id", "")] = session
+        self.harden(session)
         if url and url != "about:blank":
             session.navigate(url)
         return session
@@ -600,6 +647,7 @@ class BrowserTool:
                 session = CdpSession(self, target["id"], target["webSocketDebuggerUrl"],
                                      title=target.get("title", ""))
                 session.connect()
+                self.harden(session)
                 self._sessions[target["id"]] = session
                 return session
         return None

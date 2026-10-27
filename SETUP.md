@@ -1,4 +1,4 @@
-# SETUP - ClientHunter Factory v1.3.0
+# SETUP - ClientHunter Factory v1.4.0
 
 Windows 10/11 first (Linux works too). Python **3.10+**. 4 GB RAM is enough.
 **You need no API key, no credit card, no GPU, no Docker.**
@@ -132,11 +132,16 @@ After that, pushes from `apt_platform_github` use your existing browser login.
 
 ---
 
-## 8. Train it (about 2 seconds)
+## 8. Prove it, then train it (about 3 seconds total)
 
 ```powershell
+python -m factory.selftest                     # 78 offline checks, no network needed
 python -m factory.train_all --force --verify
 ```
+
+`factory.selftest` is the fast way to know a fresh clone is healthy: it tests
+the Maps payload parsers, the DNS client, the send-time scheduler, the
+Roman-Urdu folder, the Chrome stealth script and the router - all offline.
 
 Every model is written as **JSON** into `factory/apartments/apt_*/models/`.
 There is no pickle anywhere, so you can open and read every "brain".
@@ -150,6 +155,8 @@ python -m factory.orchestrator                 # chat with the factory
 python -m factory.orchestrator --serve         # live dashboard on :8000
 python -m factory.orchestrator --daily         # 12-step autonomous day
 python -m factory.orchestrator --status        # health of all 20 agents
+python -m factory.orchestrator "poora karachi restaurants dhoondo 40"   # full-city sweep
+python -m factory.orchestrator "purane leads refresh karo"              # 30-day re-check
 ```
 
 Open the dashboard at <http://127.0.0.1:8000/>.
@@ -164,6 +171,9 @@ Open the dashboard at <http://127.0.0.1:8000/>.
 | Type `stop` / `emergency` | Same, from the CLI |
 | Dashboard -> **EMERGENCY STOP** | Same, from the browser |
 | Close the terminal | Everything dies with the process |
+
+A full-city sweep checkpoints per neighbourhood, so stopping mid-run and
+re-running the same command resumes from the next area instead of restarting.
 
 Resume with `resume`, or the dashboard's resume path.
 

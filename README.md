@@ -1,4 +1,4 @@
-# ClientHunter Factory v1.3.0
+# ClientHunter Factory v1.4.0
 
 **A 20-agent client-acquisition factory for a Pakistani web agency that runs
 entirely on your laptop. Zero API keys. Zero usage limits. Zero data leaving
@@ -10,9 +10,25 @@ the client's own language, handles objections, sends the quote, follows up five
 times, and builds the demo site - while you sleep.
 
 ```powershell
-python -m factory.train_all --force --verify     # 0.4 s, trains everything
+python -m factory.selftest                       # 78 offline checks, no network
+python -m factory.train_all --force --verify     # ~0.5 s, trains everything
 python -m factory.orchestrator --serve           # live dashboard on :8000
 ```
+
+---
+
+## What is new in v1.4.0
+
+| Upgrade | What changed |
+|---|---|
+| **Keyless Maps scraping** | New `maps_api` tool talks to the same public Maps endpoints the UI uses - no API key, no Places billing, no Docker. Chrome (CDP) is now only the fallback. |
+| **Area-grid sweeps + resume** | A single Maps query only shows page 1. The hunter now walks every neighbourhood in `pakistani_cities.json` and checkpoints progress, so an interrupted run resumes instead of restarting. |
+| **Deliverability verification** | New `verify` tool: hand-rolled DNS client (MX records, no `dnspython`) + Pakistani mobile-prefix rules (operator + WhatsApp eligibility). Scores every email/phone so outreach never burns a slot on a dead address. |
+| **Send-time scheduler** | `factory/scheduler.py` picks the reply window per platform *and* per business type, blocks Friday Jummah, shifts for Ramadan, and spreads a batch so it looks human. |
+| **Stronger Roman-Urdu NLP** | Phonetic consonant skeletons fold the spelling chaos (`dhoondo`/`dhondo`/`dhundho` → one word) and feed the router, so typos still reach the right agent. |
+| **Chrome stealth** | Automation flags stripped, `navigator.webdriver` scrubbed before any page JS runs, RAM-saving flags for a 4 GB box. |
+| **Live dashboard panels** | Two new cards: live send windows (Karachi clock) and a deliverability checker you can type an address into. |
+| **Bug fix** | Follow-up scheduling raised `AttributeError: tm_dst` on every call - follow-ups never actually landed. Fixed, and now scheduled inside real reply windows. |
 
 ---
 
@@ -136,6 +152,7 @@ Not a metaphor - the same access you have, no more:
 |---|---|
 | Apartments loaded | 20 / 20 |
 | Trainers passing | 10 / 10 (0 failures) |
+| Offline self-test | **78 / 78 checks pass** (`python -m factory.selftest`) |
 | Router | 184 examples, 20 classes, hold-out 0.351 |
 | Lead qualifier | 70 rows, 12 features, **hold-out accuracy 0.643** |
 | Urdu NLP | 206 examples, 7 intents, 3 sentiments |
@@ -148,9 +165,16 @@ Not a metaphor - the same access you have, no more:
 
 ## Honest disclosure about data
 
-* With **Chrome + internet**, leads come from live Google Maps.
-* Without them, the hunter falls back to `factory/data/sample_leads.csv` and
+* With **internet**, leads come from live Google Maps through the keyless
+  endpoint client (`factory/apartments/tools/maps_api.py`) - no API key, no
+  Places billing. Chrome/CDP is kept as the tier-2 fallback if Google serves a
+  consent wall.
+* With **Chrome + internet** only, tier 2 drives the Maps UI itself.
+* With neither, the hunter falls back to `factory/data/sample_leads.csv` and
   **tags every row `source = sample_csv`**, so you always know what is real.
+* Every scraped lead is stamped `scraped_at` in its notes; Google's Terms
+  (§3.2.3) cap caching of Places content at 30 days, and
+  `hunter.refresh_stale()` re-checks anything older than that.
 * Prices, guarantees and portfolio come from `factory/config/agency.json` -
   **edit it with your own before you send anything to a real client.**
 * Nothing is fabricated at runtime: if a lead has not been audited, the closer
@@ -166,6 +190,7 @@ Not a metaphor - the same access you have, no more:
 | [TEST.md](TEST.md) | Copy-paste commands that prove every part works, with the real expected output |
 | [TRAINING_GUIDE.md](TRAINING_GUIDE.md) | The 10 trainers, the corpora, how to write your own training data |
 | [POWER_GUIDE.md](POWER_GUIDE.md) | The API verdict, library verdicts, manager/mouse/terminal/screen power, limits |
+| [factory/selftest.py](factory/selftest.py) | 78 offline assertions over the Maps parser, DNS, scheduler, Roman-Urdu folder |
 
 ---
 

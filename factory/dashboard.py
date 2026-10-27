@@ -90,6 +90,9 @@ class Announcer:
 class StateReader:
     """Pulls a live snapshot out of the running factory."""
 
+    #: last few deliverability checks, so the dashboard shows real work
+    recent_verifications: List[Dict[str, Any]] = []
+
     def __init__(self, orchestrator: Any):
         self.orchestrator = orchestrator
 
@@ -129,6 +132,9 @@ class StateReader:
         except Exception:
             pass
 
+        schedule = self._schedule()
+        verify_state = self._verify_state(agents)
+
         return {
             "now": now,
             "version": getattr(orchestrator, "version", "?"),
@@ -140,6 +146,8 @@ class StateReader:
             "system": system,
             "audit": audit_tail,
             "gate": gate_usage,
+            "schedule": schedule,
+            "verify": verify_state,
             "agent_count": len(agents),
         }
 
@@ -161,6 +169,54 @@ class StateReader:
             }
         except Exception as exc:
             return {"by_status": {}, "total": 0, "recent": [], "error": str(exc)}
+
+    @staticmethod
+    def _schedule() -> Dict[str, Any]:
+        """Live send-time windows (Karachi clock, no API, no network)."""
+        try:
+            from .scheduler import summary
+            return summary()
+        except Exception as exc:
+            return {"error": str(exc), "rows": []}
+
+    @staticmethod
+    def _verify_contact(contact: str, agents: Optional[Dict[str, Any]] = None
+                        ) -> Dict[str, Any]:
+        """Live deliverability check for one address or number (no API key).
+
+        Routed through the enricher apartment's ``VerifyTool`` when it is up,
+        so the MX cache and the counters on the dashboard reflect real work;
+        falls back to the plain module functions otherwise.
+        """
+        agents = agents or {}
+        try:
+            verify = agents["enricher"].tool("verify")
+        except Exception:
+            verify = None
+        try:
+            if verify is not None:
+                if "@" in contact:
+                    return verify.email(contact)
+                return verify.phone(contact)
+            from .apartments.tools.verify import email_report, phone_report
+            if "@" in contact:
+                return email_report(contact)
+            return phone_report(contact)
+        except Exception as exc:                                  # pragma: no cover
+            return {"error": str(exc)}
+
+    @staticmethod
+    def _verify_state(agents: Dict[str, Any]) -> Dict[str, Any]:
+        """Deliverability tool status - proof that verification is live."""
+        try:
+            verify = agents["enricher"].tool("verify")
+            info = verify.info()
+            info["available"] = True
+            history = list(StateReader.recent_verifications)
+            info["recent"] = history[-8:]
+            return info
+        except Exception as exc:
+            return {"available": False, "error": str(exc)[:120]}
 
     @staticmethod
     def _system(manager: Any) -> Dict[str, Any]:
@@ -194,7 +250,7 @@ class StateReader:
 
 # ------------------------------------------------------------------- http layer
 class DashboardHandler(BaseHTTPRequestHandler):
-    server_version = "ClientHunterDashboard/1.3"
+    server_version = "ClientHunterDashboard/1.4"
     orchestrator: Any = None
     reader: Optional[StateReader] = None
     announcer: Optional[Announcer] = None
@@ -334,6 +390,20 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 results = self.orchestrator.train(target)
                 self.announcer.announce("train", target=target)
                 self._json({"results": results})
+            elif path == "/api/verify":
+                contact = str(data.get("contact", "")).strip()
+                if not contact:
+                    self._json({"error": "empty contact"}, 400)
+                else:
+                    result = StateReader._verify_contact(
+                        contact, getattr(self.orchestrator, "apartments", {}))
+                    if "error" not in result:
+                        StateReader.recent_verifications.append(result)
+                        del StateReader.recent_verifications[:-20]
+                        if self.announcer:
+                            self.announcer.announce("verify", contact=contact,
+                                                    sendable=result.get("sendable"))
+                    self._json({"result": result})
             elif path == "/api/submit":
                 if manager is None:
                     self._json({"error": "manager not loaded"}, 503)
@@ -581,6 +651,26 @@ min-width:96px}
   </div>
 
   <div class="card">
+    <h2>Send windows <span class="count" id="schedclock">–</span></h2>
+    <div id="jummah" style="margin-bottom:8px"></div>
+    <table><thead><tr><th>Channel</th><th>Now</th><th>Next slot</th><th>Windows</th></tr></thead>
+      <tbody id="schedule"></tbody></table>
+  </div>
+
+  <div class="card">
+    <h2>Deliverability <span class="count" id="verifybackend">–</span></h2>
+    <div id="verifystats" class="mono" style="margin-bottom:8px"></div>
+    <table><thead><tr><th>Address</th><th>Score</th><th>Verdict</th><th>Why</th></tr></thead>
+      <tbody id="verifyrows"></tbody></table>
+    <input id="verifyinput" placeholder="email ya phone (e.g. info@bundukhan.pk / 03001234567)"
+           style="margin-top:8px">
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button class="ghost" onclick="checkContact()">Check</button>
+      <span id="verifyreply" class="mono" style="color:#a9f5d8"></span>
+    </div>
+  </div>
+
+  <div class="card">
     <h2>Audit log (hash-chained)</h2>
     <div id="audit" style="max-height:190px;overflow:auto"></div>
   </div>
@@ -650,6 +740,32 @@ function paint(s){
       '</td><td>'+esc(t.status)+'</td><td class="mono">'+out+'</td></tr>';
   }).join('')||'<tr><td colspan="5">no tasks yet</td></tr>';
 
+  const S=s.schedule||{};
+  el('schedclock').textContent=S.now||'–';
+  el('jummah').innerHTML=(S.jummah?'<span class="pill bad">Jummah break</span>':
+    (S.ramadan?'<span class="pill">Ramadan mode</span>':''));
+  el('schedule').innerHTML=(S.rows||[]).map(r=>{
+    const cls=r.send_now?'d-ok':'d-idle';
+    return '<tr><td class="mono">'+esc(r.platform)+'</td>'+
+      '<td><span class="dot '+cls+'"></span>'+(r.send_now?'send':'wait')+'</td>'+
+      '<td class="mono">'+esc(r.next_slot)+'</td>'+
+      '<td class="mono" style="color:#8b98bd">'+esc((r.windows||[]).join(', '))+'</td></tr>';
+  }).join('')||'<tr><td colspan="4">'+(S.error?esc(S.error):'n/a')+'</td></tr>';
+
+  const V=s.verify||{};
+  el('verifybackend').textContent=V.available?('dns '+(V.resolvers||[]).length+' · '+(V.phone_backend||'')):'off';
+  const vs=V.stats||{};
+  el('verifystats').textContent=V.available
+    ? ('checked '+vs.emails+' emails · '+vs.phones+' phones · '+vs.mx_lookups+' MX lookups · '+vs.sendable+' sendable')
+    : ('unavailable: '+esc(V.error||''));
+  el('verifyrows').innerHTML=(V.recent||[]).map(r=>{
+    const okCls=r.sendable?'d-ok':'d-bad';
+    return '<tr><td class="mono">'+esc(r.email||r.e164||'')+'</td><td>'+
+      Number(r.score||0).toFixed(2)+'</td>'+
+      '<td><span class="dot '+okCls+'"></span>'+(r.sendable?'sendable':'skip')+'</td>'+
+      '<td class="mono" style="color:#8b98bd">'+esc((r.reasons||[]).join(', ').slice(0,48))+'</td></tr>';
+  }).join('')||'<tr><td colspan="4">koi check abhi nahi hua</td></tr>';
+
   el('audit').innerHTML=(s.audit||[]).map(a=>'<div class="logline"><b>'+esc(a.actor)+
     '</b> '+esc(a.action)+' <span class="mono">'+esc(a.target)+'</span> → '+esc(a.result)+'</div>').join('');
 }
@@ -670,6 +786,15 @@ async function sendIntent(){
   const r=await post('/api/intent',{text:t});
   el('intentreply').textContent=r.reply||r.error;
 }
+async function checkContact(){
+  const v=el('verifyinput').value.trim();if(!v)return;
+  el('verifyreply').textContent='checking…';
+  const r=await post('/api/verify',{contact:v});
+  el('verifyreply').textContent=r.error?r.error:JSON.stringify(r.result);
+  el('verifyinput').value='';
+  refresh();
+}
+
 async function runCmd(){
   const c=el('cmd').value.trim();if(!c)return;
   el('cmd').value='';logLine('cmd','$ '+c);
