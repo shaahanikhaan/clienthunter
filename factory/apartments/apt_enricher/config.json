@@ -1,0 +1,29 @@
+{
+ "name": "apt_enricher",
+ "description": "Extracts emails, phone numbers and social handles from a lead's website (6-layer extraction).",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "request_interval_s": 2.0,
+  "max_pages_per_lead": 3,
+  "max_bytes": 220000,
+  "request_budget": 300
+ },
+ "tools": [
+  "web",
+  "enrich",
+  "file"
+ ],
+ "expected_models": [
+  "email_patterns.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

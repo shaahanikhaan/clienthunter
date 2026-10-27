@@ -1,0 +1,32 @@
+{
+ "name": "apt_platform_whatsapp",
+ "description": "WhatsApp outreach agent - waeys protocol client or WhatsApp Web over CDP.",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": true,
+  "browser": true,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_per_day": 20,
+  "min_gap_s": 45
+ },
+ "tools": [
+  "whatsapp",
+  "browser",
+  "file"
+ ],
+ "expected_models": [
+  "playbook.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch).",
+ "browser": {
+  "debug_port": 9222,
+  "headless": false,
+  "backend": "auto"
+ }
+}

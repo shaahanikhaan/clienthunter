@@ -1,0 +1,28 @@
+{
+ "name": "apt_inbox",
+ "description": "Reads email + WhatsApp replies, classifies intent/sentiment/priority, and routes each reply.",
+ "permissions": {
+  "internet": true,
+  "email": true,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_emails_per_check": 50,
+  "poll_interval_s": 300
+ },
+ "tools": [
+  "email",
+  "whatsapp",
+  "nlp_urdu",
+  "file"
+ ],
+ "expected_models": [
+  "urdu_nlp.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

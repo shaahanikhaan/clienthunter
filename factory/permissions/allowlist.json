@@ -1,0 +1,76 @@
+{
+  "_comment": "Edit me. This is the single file that decides what the factory may touch. Empty lists = nothing allowed (fail-safe deny). Use '*' to allow all, but only for transports you trust.",
+
+  "policy": {
+    "timeout_s": {"medium": 10, "high": 60},
+    "on_timeout": {"medium": "allow", "high": "deny"},
+    "auto_approve": {"low": true, "medium": false, "high": false},
+    "headless_default": {"medium": "allow", "high": "deny"},
+    "desktop_popup": true,
+    "log_all_decisions": true
+  },
+
+  "email": {
+    "enabled": true,
+    "max_per_day": 20,
+    "allow_all": false,
+    "recipients": [],
+    "domains": ["gmail.com"]
+  },
+
+  "whatsapp": {
+    "enabled": true,
+    "max_per_day": 20,
+    "allow_all": false,
+    "recipients": []
+  },
+
+  "browser": {
+    "enabled": true,
+    "max_actions_per_minute": 10,
+    "allow_all": false,
+    "domains": ["google.com", "maps.google.com", "web.whatsapp.com", "linkedin.com",
+                "facebook.com", "instagram.com", "github.com", "duckduckgo.com"]
+  },
+
+  "github": {
+    "enabled": true,
+    "require_approval": true,
+    "allow_all": false,
+    "repos": []
+  },
+
+  "mouse": {
+    "require_approval_for": ["click", "type", "drag", "hotkey"],
+    "auto_approve": ["move", "screenshot", "scroll"],
+    "screen_boundary": [0, 0, 1920, 1080],
+    "fail_safe_corner": true
+  },
+
+  "filesystem": {
+    "writable_roots": []
+  },
+
+  "agents": {
+    "_comment": "allowed_tools is optional. Omit it to inherit the global risk policy; list it to hard-restrict an apartment to a fixed action set (fail-safe deny everything else).",
+    "hunter": {"allowed_tools": ["http_get", "search", "scrape_maps", "db_read", "db_write_local", "read_file", "write_sandbox", "read_shared_data", "nlp_predict", "train_model"]},
+    "enricher": {"allowed_tools": ["http_get", "search", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "auditor": {"allowed_tools": ["http_get", "audit_site", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "outreach": {"allowed_tools": ["send_email", "send_whatsapp", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "inbox": {"allowed_tools": ["http_get", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model", "credentials_access"]},
+    "urdu_nlp": {"allowed_tools": ["nlp_predict", "db_read", "read_file", "write_sandbox", "train_model", "read_shared_data"]},
+    "requirements": {"allowed_tools": ["db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "convincer": {"allowed_tools": ["db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model", "send_whatsapp", "send_email"]},
+    "closer": {"allowed_tools": ["db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model", "send_email", "send_whatsapp"]},
+    "followup": {"allowed_tools": ["send_email", "send_whatsapp", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "builder": {"allowed_tools": ["build_demo_site", "read_file", "write_sandbox", "db_read", "db_write_local", "nlp_predict", "train_model", "publish_site"]},
+    "knowledge": {"allowed_tools": ["db_read", "read_file", "read_shared_data", "nlp_predict", "train_model", "write_sandbox"]},
+    "platform_whatsapp": {"allowed_tools": ["send_whatsapp", "browser_navigate", "browser_click", "browser_type", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "platform_linkedin": {"allowed_tools": ["browser_navigate", "browser_click", "browser_type", "connect_request", "send_dm", "post_public", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "platform_facebook": {"allowed_tools": ["browser_navigate", "browser_click", "browser_type", "send_dm", "post_public", "comment_public", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "platform_instagram": {"allowed_tools": ["browser_navigate", "browser_click", "browser_type", "send_dm", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "platform_github": {"allowed_tools": ["git_status", "git_diff", "git_commit", "create_branch", "git_push", "subprocess", "db_read", "db_write_local", "read_file", "write_sandbox", "nlp_predict", "train_model"]},
+    "self_trainer": {"allowed_tools": ["train_model", "db_read", "db_write_local", "read_file", "read_shared_data", "write_sandbox", "nlp_predict"]},
+    "security": {"allowed_tools": ["db_read", "db_write_local", "read_file", "write_sandbox", "screen_capture", "nlp_predict", "train_model"]}
+  }
+}

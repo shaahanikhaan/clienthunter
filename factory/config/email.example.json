@@ -1,0 +1,27 @@
+{
+  "_comment": "COPY THIS FILE to config/email.json and fill it in. email.json is gitignored - your App Password never leaves this machine and is never committed.",
+
+  "provider": "gmail",
+  "display_name": "Bilal - Apni Web Agency",
+  "address": "you@gmail.com",
+
+  "_app_password_help": [
+    "Gmail: Google Account > Security > 2-Step Verification (on) > App passwords >",
+    "select 'Mail' + 'Windows Computer' > copy the 16-character password.",
+    "No OAuth, no Google Cloud project, no API key. It is just an IMAP/SMTP password.",
+    "Outlook/Office365: use your normal password (or app password if 2FA is on)."
+  ],
+
+  "smtp": {"host": "smtp.gmail.com", "port": 587, "starttls": true, "ssl": false},
+  "imap": {"host": "imap.gmail.com", "port": 993, "ssl": true, "folder": "INBOX"},
+
+  "_alternatives": {
+    "outlook": {"smtp": {"host": "smtp.office365.com", "port": 587, "starttls": true},
+                "imap": {"host": "outlook.office365.com", "port": 993, "ssl": true}},
+    "custom": {"smtp": {"host": "mail.yourdomain.com", "port": 587, "starttls": true},
+               "imap": {"host": "mail.yourdomain.com", "port": 993, "ssl": true}}
+  },
+
+  "signature": "\n--\nBilal | Apni Web Agency\nWhatsApp: +92-300-0000000\nKarachi, Pakistan",
+  "max_per_day": 20
+}

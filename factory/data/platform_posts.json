@@ -1,0 +1,83 @@
+{
+  "_comment": "Per-platform behaviour learned by PlatformAgentTrainer. best_hours are Asia/Karachi local hours; the trainer adjusts them from real reply timestamps as data accumulates. daily_limit is enforced by the permission gate (never exceed it - accounts get banned).",
+
+  "platforms": {
+    "whatsapp": {
+      "daily_limit": 20,
+      "max_words": 100,
+      "best_hours": [10, 11, 12, 17, 18, 19, 20],
+      "best_days": ["monday", "tuesday", "wednesday", "thursday"],
+      "avoid_hours": [0, 1, 2, 3, 4, 5, 6, 13, 14],
+      "style": "short, personal, Salam se shuru, ek sawaal par khatam",
+      "opener_pattern": "Salam {owner_title}{owner_name}, main ne {business_name} ki site dekhi. {issue}. {benefit}. {question}",
+      "followup_gap_days": [2, 4, 7, 11, 16, 23],
+      "notes": "WhatsApp sab se tez channel hai Pakistan mein. 1-to-1 feel zaroori hai - template jaisa na lage. Emoji 1 se zyada nahi.",
+      "templates": [
+        "Salam! {business_name} ki site dekhi - {issue}. Is se {benefit}. Kya main 2 minute mein bataoon ke ye kaise theek hota hai?",
+        "{owner_name} bhai, {business_name} ke liye ek chhoti baat: {issue}. {benefit}. Free mockup bana kar bhejoon? Pasand na aaye to koi paisa nahi."
+      ]
+    },
+
+    "linkedin": {
+      "daily_limit": 15,
+      "max_words": 120,
+      "best_hours": [9, 10, 11, 14, 15, 16],
+      "best_days": ["tuesday", "wednesday", "thursday"],
+      "avoid_hours": [0, 1, 2, 3, 4, 5, 6, 20, 21, 22, 23],
+      "style": "professional, English ya Roman Urdu, value-first, koi sales pitch nahi pehle message mein",
+      "opener_pattern": "Hi {first_name}, saw {company} is {observation}. We recently {result} for a {category} in {city}. Curious - {question}",
+      "connect_note_limit": 300,
+      "notes": "LinkedIn pe pehla message kabhi pitch nahi hota. Pehle connect + observation, doosre message mein audit finding, teesre mein mockup offer.",
+      "templates": [
+        "Hi {first_name} - noticed {company}'s site loads in about {seconds}s on mobile. We got a similar {category} in {city} down to {target}s and their enquiries went up. Happy to share what we changed, no strings.",
+        "{first_name}, {company} ranks well locally but the site has no LocalBusiness schema - that's usually why Maps and search disagree. Want the 3-line fix?"
+      ]
+    },
+
+    "facebook": {
+      "daily_limit": 10,
+      "max_words": 80,
+      "best_hours": [11, 12, 13, 19, 20, 21],
+      "best_days": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+      "avoid_hours": [0, 1, 2, 3, 4, 5, 6, 7],
+      "style": "casual, community tone, comment pehle (public proof), DM baad mein",
+      "opener_pattern": "{comment_public} ... baad mein DM: Salam! {business_name} ki site dekhi, {issue}. {question}",
+      "notes": "Groups mein seedha pitch mat karo - pehle comment mein asli madad do, phir DM. Page reviews par reply dena bhi lead source hai.",
+      "templates": [
+        "Bilkul sahi kaha aap ne. By the way, {business_name} ki site mobile pe theek nahi khul rahi - main ne check kiya to {issue} tha. Chhota fix hai.",
+        "Salam! Aap ki page se {business_name} dekha. Ek cheez: {issue}. Is se {benefit}. Free mockup bhejoon?"
+      ]
+    },
+
+    "instagram": {
+      "daily_limit": 15,
+      "max_words": 60,
+      "best_hours": [12, 13, 14, 20, 21, 22],
+      "best_days": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"],
+      "avoid_hours": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      "style": "bohat short, emoji kam, story reply ya DM - pehle genuine compliment",
+      "opener_pattern": "{compliment} ... {issue} ... {question}",
+      "notes": "Instagram par log 3 second decide karte hain. Pehli line mein compliment ya specific observation. Link pehle message mein mat bhejo - DM collapse ho jata hai.",
+      "templates": [
+        "Aap ka {category} content bohat acha hai! Ek cheez notice hui: aap ki site pe {issue}. Is se {benefit}. Free mockup bana doon?",
+        "{business_name} ke photos dekhe - bohat achay. Bas site mobile pe slow hai ({seconds}s). 2 minute hain to bataoon?"
+      ]
+    },
+
+    "email": {
+      "daily_limit": 20,
+      "max_words": 200,
+      "best_hours": [9, 10, 11, 15, 16],
+      "best_days": ["tuesday", "wednesday", "thursday"],
+      "avoid_hours": [0, 1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23],
+      "style": "subject line mein specific number ya business ka naam, body mein 3 short paragraphs",
+      "subject_patterns": [
+        "{business_name}: {issue_number} issues found on your site",
+        "{business_name} ki site mobile pe {seconds}s leti hai",
+        "Quick audit: {business_name}"
+      ],
+      "opener_pattern": "Salam {owner_name},\n\n{business_name} ki site audit ki to {issue_count} issues mile:\n{issue_list}\n\n{benefit}\n\n{question}",
+      "notes": "Email WhatsApp ka backup hai - sirf tab bhejo jab WhatsApp number na ho ya 2 follow-ups ke baad jawab na aaye. Subject line sab kuch hai."
+    }
+  }
+}

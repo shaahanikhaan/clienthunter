@@ -1,0 +1,26 @@
+{
+ "name": "apt_self_trainer",
+ "description": "Continuously improves every other agent from outcomes: objection success rates, follow-up timing, category weights.",
+ "permissions": {
+  "internet": false,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "min_samples": 5,
+  "retrain_every_hours": 24
+ },
+ "tools": [
+  "file"
+ ],
+ "expected_models": [
+  "feedback.json",
+  "performance.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

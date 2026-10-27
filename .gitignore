@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Secrets - never commit
+factory/config/email.json
+
+# Generated at runtime (recreate with: python -m factory.train_all --force)
+factory/apartments/apt_*/models/*.json
+factory/apartments/apt_*/memory.db
+factory/apartments/apt_*/sandbox/*
+!factory/apartments/apt_*/sandbox/.gitkeep
+factory/data/*.db
+factory/data/*.db-journal
+backups/
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

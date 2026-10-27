@@ -1,0 +1,741 @@
+{
+  "_comment": "IntentRouter training data. Each example maps a message YOU would type (or a lead would send) to the apartment that should handle it. Add your own phrasing - the router is retrained by train_all.py every time. Columns: text (what was said), apartment (who handles it).",
+  "examples": [
+    {
+      "text": "Karachi mein restaurants dhoondo",
+      "apartment": "hunter"
+    },
+    {
+      "text": "karachi ke clinics find karo",
+      "apartment": "hunter"
+    },
+    {
+      "text": "Lahore mein salons dhoondho",
+      "apartment": "hunter"
+    },
+    {
+      "text": "Islamabad ke gyms nikal lo",
+      "apartment": "hunter"
+    },
+    {
+      "text": "naye leads lao",
+      "apartment": "hunter"
+    },
+    {
+      "text": "mujhe 50 naye clients chahiye",
+      "apartment": "hunter"
+    },
+    {
+      "text": "find restaurants in Karachi",
+      "apartment": "hunter"
+    },
+    {
+      "text": "scrape google maps for clinics in Lahore",
+      "apartment": "hunter"
+    },
+    {
+      "text": "Gulshan mein cafes dhoondo",
+      "apartment": "hunter"
+    },
+    {
+      "text": "naye business dhoondo jin ki website nahi hai",
+      "apartment": "hunter"
+    },
+    {
+      "text": "hotels in Murree find karo",
+      "apartment": "hunter"
+    },
+    {
+      "text": "real estate offices dhoondo DHA mein",
+      "apartment": "hunter"
+    },
+    {
+      "text": "lead list banao",
+      "apartment": "hunter"
+    },
+    {
+      "text": "aur leads chahiye",
+      "apartment": "hunter"
+    },
+    {
+      "text": "کراتشی میں ریستوران تلاش کرو",
+      "apartment": "hunter"
+    },
+    {
+      "text": "نئے کلائنٹ لاؤ",
+      "apartment": "hunter"
+    },
+    {
+      "text": "pharmacies dhoondo Saddar mein",
+      "apartment": "hunter"
+    },
+    {
+      "text": "boutiques ki list banao Lahore ki",
+      "apartment": "hunter"
+    },
+    {
+      "text": "schools find karo Rawalpindi mein",
+      "apartment": "hunter"
+    },
+    {
+      "text": "in leads ke emails nikalo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "emails extract karo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "phone numbers aur socials nikal lo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "enrich these leads",
+      "apartment": "enricher"
+    },
+    {
+      "text": "contact details dhoondo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "emails nikal kar update karo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "extract emails from their websites",
+      "apartment": "enricher"
+    },
+    {
+      "text": "har lead ka email chahiye",
+      "apartment": "enricher"
+    },
+    {
+      "text": "social media handles dhoondo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "kaunsi sites live hain check karo",
+      "apartment": "enricher"
+    },
+    {
+      "text": "site audit karo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "us ki website check karo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "audit their website",
+      "apartment": "auditor"
+    },
+    {
+      "text": "site ki problems batao",
+      "apartment": "auditor"
+    },
+    {
+      "text": "mobile friendly hai ya nahi check karo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "ssl certificate check karo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "site slow hai confirm karo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "audit report banao",
+      "apartment": "auditor"
+    },
+    {
+      "text": "issues ki list do",
+      "apartment": "auditor"
+    },
+    {
+      "text": "broken links dhoondo",
+      "apartment": "auditor"
+    },
+    {
+      "text": "seo score kya hai",
+      "apartment": "auditor"
+    },
+    {
+      "text": "ویب سائٹ چیک کرو",
+      "apartment": "auditor"
+    },
+    {
+      "text": "pehla message bhejo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "first contact karo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "outreach shuru karo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "WhatsApp pe pehla message bhejo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "send the opener",
+      "apartment": "outreach"
+    },
+    {
+      "text": "20 leads ko message bhejo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "cold email bhejo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "introduction message banao",
+      "apartment": "outreach"
+    },
+    {
+      "text": "audit finding ke sath message bhejo",
+      "apartment": "outreach"
+    },
+    {
+      "text": "outreach start karo Karachi se",
+      "apartment": "outreach"
+    },
+    {
+      "text": "aaj ke replies dikhao",
+      "apartment": "inbox"
+    },
+    {
+      "text": "inbox check karo",
+      "apartment": "inbox"
+    },
+    {
+      "text": "naye messages do",
+      "apartment": "inbox"
+    },
+    {
+      "text": "check my email",
+      "apartment": "inbox"
+    },
+    {
+      "text": "kisi ne reply kiya?",
+      "apartment": "inbox"
+    },
+    {
+      "text": "replies classify karo",
+      "apartment": "inbox"
+    },
+    {
+      "text": "kaun interested hai batao",
+      "apartment": "inbox"
+    },
+    {
+      "text": "unread messages lao",
+      "apartment": "inbox"
+    },
+    {
+      "text": "WhatsApp replies dikhao",
+      "apartment": "inbox"
+    },
+    {
+      "text": "inbox mein kya hai",
+      "apartment": "inbox"
+    },
+    {
+      "text": "yeh message samjho",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "is ka matlab kya hai",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "client ka kehna kya hai",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "sentiment batao",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "translate this to roman urdu",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "is message mein intent kya hai",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "price nikalo is message se",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "entities extract karo",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "یہ پیغام سمجھو",
+      "apartment": "urdu_nlp"
+    },
+    {
+      "text": "client se sawalat poocho",
+      "apartment": "requirements"
+    },
+    {
+      "text": "brief banao",
+      "apartment": "requirements"
+    },
+    {
+      "text": "requirements poocho",
+      "apartment": "requirements"
+    },
+    {
+      "text": "us se budget poocho",
+      "apartment": "requirements"
+    },
+    {
+      "text": "kya chahiye client ko maloom karo",
+      "apartment": "requirements"
+    },
+    {
+      "text": "build the project brief",
+      "apartment": "requirements"
+    },
+    {
+      "text": "missing information kya hai",
+      "apartment": "requirements"
+    },
+    {
+      "text": "discovery questions bhejo",
+      "apartment": "requirements"
+    },
+    {
+      "text": "target audience poocho",
+      "apartment": "requirements"
+    },
+    {
+      "text": "client kehti hai mehnga hai",
+      "apartment": "convincer"
+    },
+    {
+      "text": "objection handle karo",
+      "apartment": "convincer"
+    },
+    {
+      "text": "wo kehta hai sochna hai",
+      "apartment": "convincer"
+    },
+    {
+      "text": "trust build karo",
+      "apartment": "convincer"
+    },
+    {
+      "text": "client ko samjhao",
+      "apartment": "convincer"
+    },
+    {
+      "text": "wo kehta hai meri site pehle se hai",
+      "apartment": "convincer"
+    },
+    {
+      "text": "aap kaun hain pooch raha hai",
+      "apartment": "convincer"
+    },
+    {
+      "text": "convince them",
+      "apartment": "convincer"
+    },
+    {
+      "text": "free trial offer karo",
+      "apartment": "convincer"
+    },
+    {
+      "text": "proof bhejo",
+      "apartment": "convincer"
+    },
+    {
+      "text": "quote bhejo",
+      "apartment": "closer"
+    },
+    {
+      "text": "deal close karo",
+      "apartment": "closer"
+    },
+    {
+      "text": "pricing batao",
+      "apartment": "closer"
+    },
+    {
+      "text": "3 options banao",
+      "apartment": "closer"
+    },
+    {
+      "text": "invoice bhejo",
+      "apartment": "closer"
+    },
+    {
+      "text": "send the proposal",
+      "apartment": "closer"
+    },
+    {
+      "text": "monthly plan offer karo",
+      "apartment": "closer"
+    },
+    {
+      "text": "final price batao",
+      "apartment": "closer"
+    },
+    {
+      "text": "payment schedule banao",
+      "apartment": "closer"
+    },
+    {
+      "text": "call schedule karo client ke sath",
+      "apartment": "closer"
+    },
+    {
+      "text": "follow up bhejo",
+      "apartment": "followup"
+    },
+    {
+      "text": "dusra touch karo",
+      "apartment": "followup"
+    },
+    {
+      "text": "chup leads ko dobara message karo",
+      "apartment": "followup"
+    },
+    {
+      "text": "followup schedule karo",
+      "apartment": "followup"
+    },
+    {
+      "text": "naya value ke sath message bhejo",
+      "apartment": "followup"
+    },
+    {
+      "text": "3 din baad yaad dilao",
+      "apartment": "followup"
+    },
+    {
+      "text": "follow up sequence chalao",
+      "apartment": "followup"
+    },
+    {
+      "text": "pending followups dikhao",
+      "apartment": "followup"
+    },
+    {
+      "text": "client_001 ki site banao",
+      "apartment": "builder"
+    },
+    {
+      "text": "demo site banao",
+      "apartment": "builder"
+    },
+    {
+      "text": "mockup bana kar dikhao",
+      "apartment": "builder"
+    },
+    {
+      "text": "free demo generate karo",
+      "apartment": "builder"
+    },
+    {
+      "text": "restaurant ka landing page banao",
+      "apartment": "builder"
+    },
+    {
+      "text": "build a demo website",
+      "apartment": "builder"
+    },
+    {
+      "text": "html generate karo",
+      "apartment": "builder"
+    },
+    {
+      "text": "preview site banao",
+      "apartment": "builder"
+    },
+    {
+      "text": "website ka demo chahiye",
+      "apartment": "builder"
+    },
+    {
+      "text": "WhatsApp pe message bhejo",
+      "apartment": "platform_whatsapp"
+    },
+    {
+      "text": "WhatsApp se client ko follow up karo",
+      "apartment": "platform_whatsapp"
+    },
+    {
+      "text": "WhatsApp broadcast bhejo",
+      "apartment": "platform_whatsapp"
+    },
+    {
+      "text": "wa.me link banao",
+      "apartment": "platform_whatsapp"
+    },
+    {
+      "text": "WhatsApp Web kholo",
+      "apartment": "platform_whatsapp"
+    },
+    {
+      "text": "LinkedIn pe dhoondo",
+      "apartment": "platform_linkedin"
+    },
+    {
+      "text": "LinkedIn pe connection request bhejo",
+      "apartment": "platform_linkedin"
+    },
+    {
+      "text": "LinkedIn post likho",
+      "apartment": "platform_linkedin"
+    },
+    {
+      "text": "LinkedIn DM bhejo",
+      "apartment": "platform_linkedin"
+    },
+    {
+      "text": "decision makers dhoondo LinkedIn pe",
+      "apartment": "platform_linkedin"
+    },
+    {
+      "text": "Facebook page pe post karo",
+      "apartment": "platform_facebook"
+    },
+    {
+      "text": "Facebook group mein comment karo",
+      "apartment": "platform_facebook"
+    },
+    {
+      "text": "FB business pages dhoondo",
+      "apartment": "platform_facebook"
+    },
+    {
+      "text": "Facebook pe client dhoondo",
+      "apartment": "platform_facebook"
+    },
+    {
+      "text": "Instagram pe DM bhejo",
+      "apartment": "platform_instagram"
+    },
+    {
+      "text": "IG pe businesses dhoondo",
+      "apartment": "platform_instagram"
+    },
+    {
+      "text": "Instagram outreach karo",
+      "apartment": "platform_instagram"
+    },
+    {
+      "text": "GitHub pe push karo",
+      "apartment": "platform_github"
+    },
+    {
+      "text": "demo repo banao",
+      "apartment": "platform_github"
+    },
+    {
+      "text": "code publish karo GitHub pe",
+      "apartment": "platform_github"
+    },
+    {
+      "text": "git commit kar do",
+      "apartment": "platform_github"
+    },
+    {
+      "text": "GitHub pe client ko access do",
+      "apartment": "platform_github"
+    },
+    {
+      "text": "pricing kya hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "packages batao",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "basic package mein kya hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "agency ki details do",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "portfolio dikhao",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "FAQ batao",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "trial policy kya hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "maintenance charges kitne hain",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "payment terms batao",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "retrain karo",
+      "apartment": "self_trainer"
+    },
+    {
+      "text": "models improve karo",
+      "apartment": "self_trainer"
+    },
+    {
+      "text": "naye data se seekho",
+      "apartment": "self_trainer"
+    },
+    {
+      "text": "accuracy batao",
+      "apartment": "self_trainer"
+    },
+    {
+      "text": "self training chalao",
+      "apartment": "self_trainer"
+    },
+    {
+      "text": "security audit chalao",
+      "apartment": "security"
+    },
+    {
+      "text": "audit log verify karo",
+      "apartment": "security"
+    },
+    {
+      "text": "kya koi anomaly hai",
+      "apartment": "security"
+    },
+    {
+      "text": "kill switch lagao",
+      "apartment": "security"
+    },
+    {
+      "text": "backups ban ao",
+      "apartment": "security"
+    },
+    {
+      "text": "security status batao",
+      "apartment": "security"
+    },
+    {
+      "text": "aap ka rate kya hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "kitna charge karte ho",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "website banane ka kitna kharcha hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "free mockup policy kya hai",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "guarantee kya dete ho",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "refund policy batao",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "kitne din lagenge site banane mein",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "maintenance charges kya hain",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "kaun se packages hain",
+      "apartment": "knowledge"
+    },
+    {
+      "text": "manager status",
+      "apartment": "manager"
+    },
+    {
+      "text": "agents ki list dikhao",
+      "apartment": "manager"
+    },
+    {
+      "text": "task queue dikhao",
+      "apartment": "manager"
+    },
+    {
+      "text": "hunter ko pause karo",
+      "apartment": "manager"
+    },
+    {
+      "text": "ram kitni free hai",
+      "apartment": "manager"
+    },
+    {
+      "text": "powershell mein Get-Process chalao",
+      "apartment": "manager"
+    },
+    {
+      "text": "cmd mein dir chalao",
+      "apartment": "manager"
+    },
+    {
+      "text": "screenshot le lo",
+      "apartment": "manager"
+    },
+    {
+      "text": "kaun sa agent kaam kar raha hai",
+      "apartment": "manager"
+    },
+    {
+      "text": "ram kitni use ho rahi hai",
+      "apartment": "manager"
+    },
+    {
+      "text": "system info do",
+      "apartment": "manager"
+    },
+    {
+      "text": "machine ki details batao",
+      "apartment": "manager"
+    },
+    {
+      "text": "cpu check karo",
+      "apartment": "manager"
+    },
+    {
+      "text": "disk mein kitni jagah hai",
+      "apartment": "manager"
+    },
+    {
+      "text": "ram kitni free hai",
+      "apartment": "manager"
+    },
+    {
+      "text": "ram check karo",
+      "apartment": "manager"
+    },
+    {
+      "text": "memory kitni khali hai",
+      "apartment": "manager"
+    }
+  ]
+}

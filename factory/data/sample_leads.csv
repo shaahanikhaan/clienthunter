@@ -1,0 +1,25 @@
+name,phone,email,address,category,city,website,rating,reviews,source
+Karachi Biryani House,0300-1234567,info@karachibiriyani.pk,Block 7 Gulshan-e-Iqbal,restaurant,Karachi,https://karachibiriyani.pk,4.4,312,sample_csv
+Al Baik Fast Food,0301-2345678,,Tariq Road PECHS,restaurant,Karachi,,4.1,128,sample_csv
+Bundu Khan BBQ,0302-3456789,contact@bundukhan.pk,Bahadurabad,restaurant,Karachi,https://bundukhan.pk,4.6,890,sample_csv
+Dr Ayesha Dental Clinic,0303-4567890,appointment@ayeshadental.pk,Main Boulevard Gulberg,clinic,Lahore,https://ayeshadental.pk,4.8,204,sample_csv
+Zia Medical Centre,0304-5678901,,F-8 Markaz,clinic,Islamabad,,4.0,76,sample_csv
+Family Care Clinic,0305-6789012,info@familycare.pk,Satellite Town,clinic,Rawalpindi,https://familycare.pk,3.9,54,sample_csv
+Glamour Salon,0306-7890123,hello@glamoursalon.pk,F-7 Jinnah Super,salon,Islamabad,https://glamoursalon.pk,4.7,168,sample_csv
+Nadia Beauty Parlour,0307-8901234,,DHA Phase 5,salon,Karachi,,4.3,91,sample_csv
+Gents Corner Barbers,0308-9012345,,Johar Town,salon,Lahore,,4.2,63,sample_csv
+PowerHouse Gym,0309-0123456,info@powerhousegym.pk,Commercial Market,gym,Rawalpindi,https://powerhousegym.pk,4.5,142,sample_csv
+FitZone Health Club,0310-1234567,,Clifton Block 5,gym,Karachi,,4.1,88,sample_csv
+DHA Properties,0311-2345678,sales@dhaproperties.pk,DHA Phase 6,real_estate,Karachi,https://dhaproperties.pk,4.0,231,sample_csv
+Bright Future Academy,0312-3456789,admissions@brightfuture.edu.pk,G-9/4,school,Islamabad,https://brightfuture.edu.pk,4.6,97,sample_csv
+Al Noor Medical Store,0313-4567890,,D Ground,pharmacy,Faisalabad,,4.2,45,sample_csv
+Zainab Lawn Collection,0314-5678901,info@zainablawn.pk,MM Alam Road,boutique,Lahore,https://zainablawn.pk,4.5,276,sample_csv
+Zeeshan Autos,0315-6789012,,Shah Faisal Colony,auto_workshop,Karachi,,4.3,58,sample_csv
+Pine View Guest House,0316-7890123,stay@pineview.pk,Mall Road Murree,hotel,Murree,https://pineview.pk,4.4,189,sample_csv
+Sunrise Public School,0317-8901234,,Gulgasht Colony,school,Multan,,4.1,66,sample_csv
+Legal Edge Associates,0318-9012345,contact@legaledge.pk,Blue Area,law_firm,Islamabad,https://legaledge.pk,4.2,38,sample_csv
+Tech World Electronics,0319-0123456,info@techworld.pk,Hafeez Centre,electronics,Lahore,https://techworld.pk,3.8,112,sample_csv
+Sialkot Sports House,0320-1234567,sales@sialkotsports.pk,Paris Road,electronics,Sialkot,https://sialkotsports.pk,4.7,301,sample_csv
+Mehran Restaurant,0321-2345678,,Saddar,restaurant,Hyderabad,,4.0,74,sample_csv
+City Gymnasium,0322-3456789,,Cantt,gym,Peshawar,,4.4,52,sample_csv
+Quetta Bakers,0323-4567890,info@quettabakers.pk,Jinnah Road,restaurant,Quetta,https://quettabakers.pk,4.3,87,sample_csv

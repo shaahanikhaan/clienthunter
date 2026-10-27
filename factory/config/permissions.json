@@ -1,0 +1,36 @@
+{
+  "_comment": "Global capability matrix. Effective permission = global AND apartment config.json AND this matrix AND runtime override. Set anything to false to hard-disable it factory-wide; the kill switch does this automatically for internet/email/whatsapp/browser/subprocess.",
+
+  "global": {
+    "internet": true,
+    "email": true,
+    "whatsapp": true,
+    "browser": true,
+    "file_read": true,
+    "file_write": true,
+    "subprocess": true,
+    "shared_write": true
+  },
+
+  "apartments": {
+    "apt_urdu_nlp":        {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_requirements":    {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_convincer":       {"internet": false, "browser": false, "subprocess": false},
+    "apt_closer":          {"internet": false, "browser": false, "subprocess": false},
+    "apt_knowledge":       {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_security":        {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_self_trainer":    {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_hunter":          {"email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_enricher":        {"email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_auditor":         {"email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_outreach":        {"browser": false, "subprocess": false},
+    "apt_inbox":           {"browser": false, "subprocess": false},
+    "apt_followup":        {"browser": false, "subprocess": false},
+    "apt_builder":         {"internet": false, "email": false, "whatsapp": false, "browser": false, "subprocess": false},
+    "apt_platform_whatsapp": {"email": false, "subprocess": false},
+    "apt_platform_linkedin": {"email": false, "whatsapp": false, "subprocess": false},
+    "apt_platform_facebook": {"email": false, "whatsapp": false, "subprocess": false},
+    "apt_platform_instagram": {"email": false, "whatsapp": false, "subprocess": false},
+    "apt_platform_github":   {"email": false, "whatsapp": false, "browser": false}
+  }
+}

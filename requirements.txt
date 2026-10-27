@@ -1,0 +1,63 @@
+# ClientHunter Factory v1.3.0 - optional dependencies
+#
+# The factory runs with ZERO of these installed: every module falls back to a
+# pure standard-library implementation.  Install only what you want to
+# accelerate, on your own machine, with:
+#
+#     pip install -r requirements.txt          (everything)
+#     pip install <one package>                (just what you need)
+#
+# Nothing here needs an API key, a credit card, a GPU or Docker.
+
+# ---------------------------------------------------------------------------
+# Browser - drives your real Chrome over the DevTools Protocol (no key, no
+# Playwright/Selenium/Puppeteer).  ricibrowser is a thin pure-python CDP
+# client; the factory already ships its own CDP client and uses this only if
+# it happens to be present.
+# ---------------------------------------------------------------------------
+ricibrowser>=0.2.29
+
+# ---------------------------------------------------------------------------
+# Email - IMAP/SMTP with a Gmail App Password.  waggle-mail is stdlib-only;
+# the fallbacks are the factory's own imaplib/smtplib code.
+# ---------------------------------------------------------------------------
+waggle-mail>=1.9.28
+
+# ---------------------------------------------------------------------------
+# WhatsApp - pure-Python Baileys port (no Node.js, no browser required).
+# Fallback: WhatsApp Web driven through Chrome/CDP.
+# ---------------------------------------------------------------------------
+waeys>=0.1.3
+
+# ---------------------------------------------------------------------------
+# Mouse / keyboard GUI automation.  pyautogui is the reliable cross-platform
+# option; je_auto_control adds template matching but pins opencv-python, so
+# it is listed comment-out-able.  Fallback: ctypes user32 (Windows) or xdotool.
+# ---------------------------------------------------------------------------
+pyautogui>=0.9.54
+# je_auto_control>=1.0.6      # optional: needs opencv-python + pillow (~200 MB)
+
+# ---------------------------------------------------------------------------
+# Ctrl+Shift+Q emergency kill switch needs a global hotkey listener.
+# ---------------------------------------------------------------------------
+pynput>=1.7.6
+
+# ---------------------------------------------------------------------------
+# Screenshots + OCR/template matching for apt_manager's screen control.
+# ---------------------------------------------------------------------------
+pillow>=10.0.0
+
+# ---------------------------------------------------------------------------
+# Optional tier-2 local LLM backend (GGUF, CPU-only, llama.cpp bindings).
+# Off by default: the n-gram model in factory/ml.py needs nothing.
+# Only install if you already have a small Q4 GGUF model on disk.
+# ---------------------------------------------------------------------------
+# llama-cpp-python>=0.2.0     # CPU build:  CMAKE_ARGS="-DLLAMA_BLAS=OFF" pip install llama-cpp-python
+
+# ---------------------------------------------------------------------------
+# NOT used, deliberately:
+#   agentyc            - bundles anthropic==0.76.0 -> needs an API key. Rejected.
+#   jev-urdu           - needs torch + transformers (~2 GB). Rejected on 4 GB.
+#   piwapp             - requires Python 3.12 (this project targets 3.10+).
+#   openai / anthropic / google-generativeai - API keys. Forbidden by design.
+# ---------------------------------------------------------------------------

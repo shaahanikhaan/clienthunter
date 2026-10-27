@@ -1,0 +1,26 @@
+{
+ "name": "apt_security",
+ "description": "9-sub-agent security grid: network, code, files, input, auth, anomaly, crypto, audit, decoys. Can trigger the kill switch.",
+ "permissions": {
+  "internet": false,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "audit_tail": 500,
+  "backup_keep_days": 14
+ },
+ "tools": [
+  "file",
+  "screen"
+ ],
+ "expected_models": [
+  "baseline.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

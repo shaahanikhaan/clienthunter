@@ -1,0 +1,24 @@
+{
+ "name": "apt_knowledge",
+ "description": "Agency brain - TF-IDF search over pricing, FAQ, scripts, portfolio and guarantees.",
+ "permissions": {
+  "internet": false,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": false
+ },
+ "limits": {
+  "top_k": 3
+ },
+ "tools": [
+  "file"
+ ],
+ "expected_models": [
+  "knowledge.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

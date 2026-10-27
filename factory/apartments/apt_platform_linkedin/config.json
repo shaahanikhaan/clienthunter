@@ -1,0 +1,31 @@
+{
+ "name": "apt_platform_linkedin",
+ "description": "LinkedIn presence agent - search, connect with note, and DM with a value-first opener.",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": false,
+  "browser": true,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_per_day": 15,
+  "max_actions_per_minute": 6
+ },
+ "tools": [
+  "browser",
+  "file"
+ ],
+ "expected_models": [
+  "playbook.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch).",
+ "browser": {
+  "debug_port": 9222,
+  "headless": false,
+  "backend": "auto"
+ }
+}

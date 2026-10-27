@@ -1,0 +1,31 @@
+{
+ "name": "apt_hunter",
+ "description": "Finds local Pakistani businesses on Google Maps and directories, then writes them to the shared leads table.",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": false,
+  "browser": true,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_leads_per_run": 40,
+  "request_interval_s": 2.0,
+  "max_scrolls": 8,
+  "max_results_per_query": 40,
+  "respect_robots": true,
+  "request_budget": 250
+ },
+ "tools": [
+  "web",
+  "scrape",
+  "file"
+ ],
+ "expected_models": [
+  "city_score.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

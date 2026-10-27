@@ -1,0 +1,26 @@
+{
+ "name": "apt_platform_github",
+ "description": "GitHub presence agent - builds a demo repo and pushes only after human approval.",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": true,
+  "shared_write": true
+ },
+ "limits": {
+  "max_pushes_per_day": 5,
+  "require_approval": true
+ },
+ "tools": [
+  "github",
+  "file"
+ ],
+ "expected_models": [
+  "repo_plan.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

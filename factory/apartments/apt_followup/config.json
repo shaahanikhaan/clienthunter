@@ -1,0 +1,27 @@
+{
+ "name": "apt_followup",
+ "description": "Persistence engine - 5+ touches, each one carrying new value. Never 'just checking in'.",
+ "permissions": {
+  "internet": true,
+  "email": true,
+  "whatsapp": true,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_per_day": 20,
+  "max_touches": 6
+ },
+ "tools": [
+  "whatsapp",
+  "email",
+  "file"
+ ],
+ "expected_models": [
+  "timing.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

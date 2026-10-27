@@ -1,0 +1,27 @@
+{
+ "name": "apt_closer",
+ "description": "Pricing, 3-option quotes, trial and monthly offers, invoices, and deal closing.",
+ "permissions": {
+  "internet": false,
+  "email": true,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_per_day": 10
+ },
+ "tools": [
+  "email",
+  "file",
+  "nlp_urdu"
+ ],
+ "expected_models": [
+  "qualifier.json",
+  "pricing.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

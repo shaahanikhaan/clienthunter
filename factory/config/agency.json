@@ -1,0 +1,121 @@
+{
+  "agency": {
+    "name": "Apni Web Agency",
+    "tagline": "Karachi se pooray Pakistan ke liye affordable websites",
+    "owner_name": "Bilal",
+    "owner_role": "Founder",
+    "city": "Karachi",
+    "phone": "+92-300-0000000",
+    "email": "hello@apniwebagency.com",
+    "website": "https://apniwebagency.com",
+    "whatsapp": "+92-300-0000000",
+    "years_experience": 3,
+    "team_size": 2,
+    "languages": ["Urdu", "Roman Urdu", "English"],
+    "response_window": "2 ghante ke andar (kaam ke waqt)"
+  },
+
+  "services": [
+    {"id": "business_site", "name": "Business Website", "delivery_days": 7},
+    {"id": "ecommerce",     "name": "E-commerce Store", "delivery_days": 14},
+    {"id": "restaurant",    "name": "Restaurant Site (menu + ordering)", "delivery_days": 7},
+    {"id": "clinic",        "name": "Clinic / Doctor Site (appointment)", "delivery_days": 7},
+    {"id": "portfolio",     "name": "Portfolio / Personal Brand", "delivery_days": 5},
+    {"id": "landing",       "name": "Landing Page (ads ke liye)", "delivery_days": 3},
+    {"id": "seo",           "name": "Local SEO (Google ranking)", "delivery_days": 30},
+    {"id": "maintenance",   "name": "Monthly Maintenance", "delivery_days": 30}
+  ],
+
+  "currency": "PKR",
+  "packages": {
+    "basic": {
+      "name": "Basic",
+      "price": 15000,
+      "monthly": 1500,
+      "delivery_days": 7,
+      "includes": ["5 pages", "mobile responsive", "WhatsApp button", "contact form",
+                   "Google Map embed", "basic SEO"],
+      "best_for": "chhoti shop, startup, single-location business"
+    },
+    "recommended": {
+      "name": "Recommended",
+      "price": 35000,
+      "monthly": 3000,
+      "delivery_days": 10,
+      "includes": ["10 pages", "custom design", "WhatsApp + call buttons", "SEO setup",
+                   "speed optimisation", "Google Business setup", "3 months support",
+                   "analytics"],
+      "best_for": "restaurants, clinics, salons - sab se zyada chuna jata hai"
+    },
+    "premium": {
+      "name": "Premium",
+      "price": 75000,
+      "monthly": 6000,
+      "delivery_days": 21,
+      "includes": ["unlimited pages", "e-commerce / booking engine", "payment gateway",
+                   "custom admin panel", "copywriting", "photography guidance",
+                   "12 months support", "priority response"],
+      "best_for": "multi-branch, e-commerce, serious growth"
+    }
+  },
+
+  "addons": [
+    {"id": "logo",       "name": "Logo design",              "price": 5000},
+    {"id": "content",    "name": "Content writing (10 pages)", "price": 8000},
+    {"id": "seo_local",  "name": "Local SEO package (3 months)", "price": 12000},
+    {"id": "gmb",        "name": "Google Business Profile setup", "price": 3000},
+    {"id": "social_kit", "name": "Social media kit",          "price": 4000},
+    {"id": "domain",     "name": "Domain + hosting (1 year)", "price": 6000}
+  ],
+
+  "trial_policy": {
+    "enabled": true,
+    "kind": "free_mockup",
+    "description": "Pehle aap ki site ka free demo (homepage mockup) bana kar dikhatay hain. Pasand aaye tab payment.",
+    "mockup_hours": 24,
+    "refund_days": 7
+  },
+
+  "payment_terms": {
+    "advance_percent": 50,
+    "balance_on": "delivery",
+    "methods": ["bank transfer", "JazzCash", "EasyPaisa"],
+    "monthly_option": true,
+    "monthly_note": "Ya phir sirf monthly: chhoti fee + hosting, koi bara upfront nahi."
+  },
+
+  "guarantees": [
+    "Mobile-friendly - har phone pe theek dikhega",
+    "7 din ke andar delivery ya paisay wapas",
+    "Source code aap ki property hogi",
+    "Training: aap khud edits karna seekh jayen ge",
+    "Live chat/WhatsApp support 3 mahine tak free"
+  ],
+
+  "portfolio": [
+    {"name": "Karachi Biryani House", "city": "Karachi", "category": "restaurant",
+     "result": "online orders 40% barh gaye, 3 mahine mein",
+     "url": "https://example.com/karachi-biryani"},
+    {"name": "Dr. Ayesha Dental Clinic", "city": "Lahore", "category": "clinic",
+     "result": "appointment bookings 2x, phone calls 35% kam",
+     "url": "https://example.com/ayesha-dental"},
+    {"name": "Glamour Salon", "city": "Islamabad", "category": "salon",
+     "result": "Google pe #1 local rank, 60% nay clients",
+     "url": "https://example.com/glamour-salon"},
+    {"name": "Zeeshan Autos", "city": "Karachi", "category": "auto_workshop",
+     "result": "WhatsApp inquiries 3x",
+     "url": "https://example.com/zeeshan-autos"}
+  ],
+
+  "outreach_rules": {
+    "max_whatsapp_per_day": 20,
+    "max_email_per_day": 20,
+    "whatsapp_max_words": 100,
+    "email_max_words": 200,
+    "never_open_with": ["We build websites", "Hum website banatay hain",
+                        "Dear Sir", "I hope this email finds you well"],
+    "always_include": ["specific audit finding", "business ka naam", "ek sawaal"],
+    "working_hours": {"start": 10, "end": 19, "timezone": "Asia/Karachi"},
+    "followup_schedule_days": [2, 4, 7, 11, 16, 23]
+  }
+}

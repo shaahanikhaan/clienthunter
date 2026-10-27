@@ -1,0 +1,25 @@
+{
+ "name": "apt_builder",
+ "description": "Builds sandboxed demo websites (single-file HTML) for free-mockup offers.",
+ "permissions": {
+  "internet": false,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_pages": 5,
+  "max_html_bytes": 400000
+ },
+ "tools": [
+  "file"
+ ],
+ "expected_models": [
+  "layouts.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

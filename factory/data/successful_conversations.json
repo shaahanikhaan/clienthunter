@@ -1,0 +1,220 @@
+{
+  "_comment": "Conversation memory. Two uses: (1) TrustScriptTrainer extracts which opener -> which reply -> which close actually produced revenue, and turns them into reusable templates; (2) the local n-gram model trains on the winning message text so generated drafts sound like you. Add every real conversation here - won AND lost. Lost ones teach the model what to stop doing. outcome: won|lost|pending. value_pkr: final deal size (0 for lost).",
+
+  "conversations": [
+    {
+      "id": "conv_001", "outcome": "won", "value_pkr": 35000, "channel": "whatsapp",
+      "category": "restaurant", "city": "Karachi",
+      "lead": {"name": "Karachi Biryani House", "audit_score": 42,
+               "top_issue": "no_whatsapp_link", "second_issue": "no_viewport"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Main ne Karachi Biryani House ki website dekhi. Aik cheez notice hui: aap ka menu PDF hai jo phone pe theek se nahi khulta, aur WhatsApp order ka koi button nahi hai. Is wajah se online order aane wale customers Foodpanda chale jate hain - wahan 25% commission bhi jata hai. Kya main aap ko 2 minute mein batadoon ke ye kaise theek ho sakta hai?"},
+        {"from": "lead", "text": "haan batao, humara menu pdf hai sahi"},
+        {"from": "agent", "text": "Do kaam hain: (1) mobile menu page - har dish khul kar dikhe, phone pe zoom ki zarurat nahi. (2) WhatsApp order button - customer ek tap mein order bhej de. Karachi Biryani House ke liye 7 din ka kaam hai, 35,000 PKR. Main pehle free mockup bana kar bhejta hoon - aaj shaam tak. Dekh kar decide karna."},
+        {"from": "lead", "text": "mockup bhejo pehle"},
+        {"from": "agent", "text": "Bhej raha hoon 6 baje tak. Is mein aap ka asli menu, asli rates, aur WhatsApp button hoga - bilkul waise jaise live site dikhegi. Kuch change karna ho to bata dena."},
+        {"from": "lead", "text": "acha lag raha hai. price thoda kam ho sakta hai?"},
+        {"from": "agent", "text": "Samajh sakta hoon. Do raaste hain: (1) Basic package 15,000 - sirf mobile menu + WhatsApp button, 5 pages, 7 din. (2) Recommended 35,000 - is mein SEO aur Google Business setup bhi hai, jis se 'biryani near me' search mein aap aate hain. Ya phir monthly: 3,000 mahine. Aap ka kaam Basic mein bhi ho jayega."},
+        {"from": "lead", "text": "recommended kar dete hain lekin 50% advance"},
+        {"from": "agent", "text": "Bilkul - 50% advance (17,500), baqi delivery par. Aaj mockup approve kar dein to kal start kar deta hoon, 10 din mein live. Invoice aur scope likh kar bhej raha hoon. JazzCash ya bank transfer, jo asaan ho."},
+        {"from": "lead", "text": "ok advance bhej dete hain"},
+        {"from": "agent", "text": "Shukriya! Advance milte hi start kar raha hoon. Kal sham tak design ka pehla version milega. Aap bas photos aur menu ki final list bhej dena."}
+      ],
+      "winning_moves": ["specific audit finding in opener", "free mockup before payment",
+                        "tiered pricing instead of discount", "50% advance framed as standard"]
+    },
+    {
+      "id": "conv_002", "outcome": "won", "value_pkr": 35000, "channel": "whatsapp",
+      "category": "clinic", "city": "Lahore",
+      "lead": {"name": "Dr Ayesha Dental Clinic", "audit_score": 38,
+               "top_issue": "no_contact_info", "second_issue": "no_viewport"},
+      "messages": [
+        {"from": "agent", "text": "Salam Dr Sahiba. Main ne Ayesha Dental Clinic ki site check ki. Mobile pe kholne par phone number dhoondhna mushkil ho raha hai - 3 scroll ke baad milta hai, aur appointment ka koi form nahi. Is wajah se jo patient raat ko search karta hai, wo agle clinic chala jata hai. Kya main 2 minute mein bataoon ke is se aap ki kitni appointments bach sakti hain?"},
+        {"from": "lead", "text": "haan bataein"},
+        {"from": "agent", "text": "Aap ki receptionist roz kitne calls attend karti hain? Zyada tar sirf timings aur fees poochne ke liye hote hain. Ek simple appointment form + clear timings page se ye calls 35% kam ho jati hain - receptionist ka waqt bach jata hai."},
+        {"from": "lead", "text": "sahi baat hai, lekin pehle humara koi kaam dekhna chahiye"},
+        {"from": "agent", "text": "Zaroor. Main {my_name}, Karachi se - 3 saal se clinics ke sath kaam kar raha hoon. Pichle mahine ek clinic ki site banayi thi, result: appointments double hue, calls 35% kam. Aur aap ke liye free mockup bana deta hoon - 24 ghante mein. Pasand na aaye to koi paisa nahi."},
+        {"from": "lead", "text": "theek hai bana kar bhejo"},
+        {"from": "agent", "text": "Kal subah 11 baje tak aap ke paas hoga. Is mein appointment form, timings, doctors profile aur WhatsApp button hoga. Ek cheez aur pooch loon: kya aap online consultation bhi dete hain?"},
+        {"from": "lead", "text": "nahi sirf physical"},
+        {"from": "agent", "text": "Theek hai - to form mein sirf preferred date/time hoga. Mockup approve karne ke baad 50% advance, baqi delivery par. 10 din mein live ho jayegi."},
+        {"from": "lead", "text": "ok kar dete hain"},
+        {"from": "agent", "text": "Bohat shukriya. Aaj scope likh kar bhej raha hoon. Kal mockup, phir advance, phir 10 din mein live site."}
+      ],
+      "winning_moves": ["quantified the pain (35% calls)", "portfolio with measurable result",
+                        "free mockup with deadline", "asked a qualifying question mid-flow"]
+    },
+    {
+      "id": "conv_003", "outcome": "won", "value_pkr": 15000, "channel": "whatsapp",
+      "category": "salon", "city": "Islamabad",
+      "lead": {"name": "Glamour Salon", "audit_score": 55,
+               "top_issue": "no_whatsapp_link", "second_issue": "no_schema"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Glamour Salon ki site dekhi. Instagram acha chal raha hai, lekin site pe booking ka koi rasta nahi - sirf phone number hai. Aur Google pe 'salon near me' search mein aap ki site nahi aa rahi kyunki LocalBusiness schema missing hai. Ek chhota fix hai - kya bataoon?"},
+        {"from": "lead", "text": "humara budget kam hai"},
+        {"from": "agent", "text": "Samajh sakta hoon. Basic package 15,000 mein: 5 pages, mobile ready, WhatsApp booking button, aur Google Business setup. Ya monthly 1,500. Bridal package ki details bhi ek page pe aa jayengi - abhi log phone kar ke poochte hain na rates?"},
+        {"from": "lead", "text": "monthly kitna hai total"},
+        {"from": "agent", "text": "Monthly: 1,500 mahine + 5,000 one-time setup. Koi bara upfront nahi. Jab chahein rok sakte hain. Is mein hosting bhi shamil hai."},
+        {"from": "lead", "text": "theek hai shuru karte hain"},
+        {"from": "agent", "text": "Bohat acha. 5,000 setup aaj, aur 1,500 har mahine. 7 din mein live. Photos aur bridal rates ki list bhej dena - baqi main handle kar loon."}
+      ],
+      "winning_moves": ["led with the schema gap (technical but concrete)",
+                        "monthly option closed a low-budget lead", "named their real pain (phone rate calls)"]
+    },
+    {
+      "id": "conv_004", "outcome": "lost", "value_pkr": 0, "channel": "whatsapp",
+      "category": "restaurant", "city": "Karachi",
+      "lead": {"name": "Al Baik Fast Food", "audit_score": 61,
+               "top_issue": "no_viewport", "second_issue": "slow_ttfb"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Hum websites banate hain - aap ko chahiye? Aap ka business grow kar sakta hai."},
+        {"from": "lead", "text": "aap kaun"},
+        {"from": "agent", "text": "Main ek web agency se hoon. Hum ne bohat sari sites banayi hain. Aap ko rate bata doon?"},
+        {"from": "lead", "text": "nahi chahiye"},
+        {"from": "agent", "text": "Sir please ek baar soch lein, bohat faida hoga."},
+        {"from": "lead", "text": "block kar raha hoon"}
+      ],
+      "losing_moves": ["generic opener with no audit finding", "no proof point",
+                       "begging after rejection", "ignored the trust question"]
+    },
+    {
+      "id": "conv_005", "outcome": "won", "value_pkr": 75000, "channel": "email",
+      "category": "hotel", "city": "Murree",
+      "lead": {"name": "Pine View Guest House", "audit_score": 29,
+               "top_issue": "broken_links", "second_issue": "no_whatsapp_link"},
+      "messages": [
+        {"from": "agent", "text": "Salam. Pine View Guest House ki site audit ki: 4 links tooti hui hain (Rooms, Gallery, Contact mein se 2 khul hi nahi rahin), aur direct booking ka koi rasta nahi - sirf Booking.com ka widget hai jis se 15-18% commission jata hai. Agar aap har mahine sirf 8 direct bookings le aayein to site ka paisa 4 mahine mein nikal jata hai. Kya main ek page ka plan bhejoon?"},
+        {"from": "lead", "text": "please send details"},
+        {"from": "agent", "text": "Zaroor. (1) Tooti links theek + mobile booking engine with room availability. (2) Scope: 8 pages, booking form, payment gateway, gallery, admin panel. (3) Time: 21 din. (4) Price: 75,000 PKR, ya 6,000 mahine. (5) Guarantee: pasand na aaye to 7 din mein paisay wapas. Ek sawal: kitne rooms hain aur Booking.com se kitni booking aati hai?"},
+        {"from": "lead", "text": "12 rooms hain, booking.com se 30-35 monthly"},
+        {"from": "agent", "text": "To hisaab simple hai: 35 bookings par ~18% commission = har mahine 60-70 hazar sirf commission. Direct booking engine se agar 30% shift ho jaye to 20 hazar mahine bachte hain - site 4 mahine mein free. Main free mockup bana kar bhejta hoon: aap ka asli lobby aur rooms ke sath."},
+        {"from": "lead", "text": "bhejo"},
+        {"from": "agent", "text": "Kal tak. Is ke sath commission calculator bhi hoga - aap khud dekh lena ke kitni bachat hai."},
+        {"from": "lead", "text": "let's go ahead"},
+        {"from": "agent", "text": "Bohat shukriya. 50% advance (37,500) aaj, 21 din mein live. Invoice aur contract bhej raha hoon. Room photos ki list bhi chahiye hogi."}
+      ],
+      "winning_moves": ["commission math made the price irrelevant",
+                        "specific broken links with names", "calculator as proof artifact"]
+    },
+    {
+      "id": "conv_006", "outcome": "won", "value_pkr": 35000, "channel": "whatsapp",
+      "category": "boutique", "city": "Lahore",
+      "lead": {"name": "Zainab Lawn Collection", "audit_score": 47,
+               "top_issue": "heavy_page", "second_issue": "images_no_alt"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Zainab Lawn Collection ki site 4G pe kholne mein 11 second lag rahe hain - wajah ye hai ke images compress nahi hain (page size 6.2 MB). Mobile data walay customers 3 second mein chale jate hain. Aur images mein alt text nahi hai to Google Images se traffic bilkul nahi aa raha. Dono fix ho sakte hain - 2 minute hain?"},
+        {"from": "lead", "text": "meri site to theek hai"},
+        {"from": "agent", "text": "Bilkul - design bohat acha hai, main design ki baat nahi kar raha. Sirf do technical cheezein: images compress kar den (quality same rahegi, size 80% kam), aur har image ko naam den (Google samajh jaye ke 'lawn suit 2026' hai). Aap ka design waise ka waisa rahega, bas tez chalega."},
+        {"from": "lead", "text": "acha theek hai kya charge hoga"},
+        {"from": "agent", "text": "Recommended package 35,000: 10 pages, image optimisation, SEO, aur Google Business. Ya agar sirf itna kaam karwana hai to alag se 12,000. Main free mockup se pehle dikhata hoon ke compression ke baad bhi quality waise hi hai - aap khud compare kar lena."},
+        {"from": "lead", "text": "ok recommended kar dete hain"},
+        {"from": "agent", "text": "Shukriya! 50% advance, 10 din mein live. Aap bas original photos ki high-res copy bhej dena - compression main handle kar loonga."}
+      ],
+      "winning_moves": ["agreed with them first (design is good)",
+                        "separated technical fix from design criticism",
+                        "offered a smaller scope honestly"]
+    },
+    {
+      "id": "conv_007", "outcome": "lost", "value_pkr": 0, "channel": "whatsapp",
+      "category": "gym", "city": "Rawalpindi",
+      "lead": {"name": "PowerHouse Gym", "audit_score": 52,
+               "top_issue": "no_viewport", "second_issue": "no_meta_description"},
+      "messages": [
+        {"from": "agent", "text": "Salam! PowerHouse Gym ki site mobile pe theek nahi dikhti - viewport tag missing hai. Fix karwa dein?"},
+        {"from": "lead", "text": "kitna lagega"},
+        {"from": "agent", "text": "25,000"},
+        {"from": "lead", "text": "bohat mehnga hai"},
+        {"from": "agent", "text": "Sir quality kaam hai, itna hi hota hai."},
+        {"from": "lead", "text": "nahi"}
+      ],
+      "losing_moves": ["no tiered options offered", "no monthly option",
+                       "defended price instead of adding value", "no proof point"]
+    },
+    {
+      "id": "conv_008", "outcome": "won", "value_pkr": 25000, "channel": "whatsapp",
+      "category": "auto_workshop", "city": "Karachi",
+      "lead": {"name": "Zeeshan Autos", "audit_score": 44,
+               "top_issue": "no_website", "second_issue": "no_schema"},
+      "messages": [
+        {"from": "agent", "text": "Salam bhai! Zeeshan Autos Google Maps par 4.6 rating aur 180 reviews ke sath acha chal raha hai - lekin wahan 'Website' ka button khaali hai. Jo customer aap ka naam search karta hai, usay timings aur services nahi miltin. Sirf ek chhota page is khaali jagah ko bhar deta hai."},
+        {"from": "lead", "text": "hum to whatsapp se kaam chala lete hain"},
+        {"from": "agent", "text": "Sahi hai, WhatsApp sab se tez hai - main us ko replace nahi kar raha. Bas itna ke website se WhatsApp button par click hoga. Abhi customer ko aap ka number save karna parta hai. Search se aane wala naya customer seedha aap tak pohnche - yehi farq hai."},
+        {"from": "lead", "text": "samajh gaya, rate?"},
+        {"from": "agent", "text": "Basic 15,000 (5 pages, mobile ready, WhatsApp button, Google Map) ya Recommended 25,000 (is mein services list aur SEO bhi). Monthly bhi hai: 1,500 mahine. Free mockup bana doon pehle?"},
+        {"from": "lead", "text": "recommended kar dete hain"},
+        {"from": "agent", "text": "Bohat acha. 50% advance aaj, 10 din mein live. Services ki list aur workshop ki 5-6 photos bhej dena."}
+      ],
+      "winning_moves": ["used their own Google Maps gap as proof",
+                        "agreed WhatsApp works, then positioned site as a feeder",
+                        "gave 3 options"]
+    },
+    {
+      "id": "conv_009", "outcome": "won", "value_pkr": 40000, "channel": "email",
+      "category": "school", "city": "Islamabad",
+      "lead": {"name": "Bright Future Academy", "audit_score": 51,
+               "top_issue": "no_sitemap", "second_issue": "broken_links"},
+      "messages": [
+        {"from": "agent", "text": "Salam. Bright Future Academy ki site audit: 3 links tooti hui hain (Admissions, Results, Contact), sitemap.xml missing hai, aur site 2019 ke baad update nahi hui - footer mein purani dates hain. Admission season shuru hone wala hai; parents sab se pehle website dekhte hain. Kya main ek one-page plan bhejoon?"},
+        {"from": "lead", "text": "please share proposal and your portfolio"},
+        {"from": "agent", "text": "Zaroor. Portfolio: Karachi Biryani House (orders +40%), Dr Ayesha Dental (appointments 2x), Glamour Salon (local rank #1). Aap ke liye plan: (1) broken links theek + sitemap, (2) admission enquiry form with class selection, (3) results portal link, (4) mobile-first redesign. Time 12 din, price 40,000. Guarantee: 7 din refund. Free mockup bhi bana kar bhejta hoon."},
+        {"from": "lead", "text": "board approval lena hoga"},
+        {"from": "agent", "text": "Bilkul - main ek one-page summary bhej deta hoon jo aap board ko forward kar sakein: masla, solution, time, price, guarantee, aur 3 references. Approval ke baad 50% advance. Mockup waise bhi free hai - aap board ko dikhane ke liye use kar sakte hain."},
+        {"from": "lead", "text": "approved"},
+        {"from": "agent", "text": "Bohat shukriya. Invoice bhej raha hoon. 12 din mein live, aur staff ko training bhi doonga khud updates karne ki."}
+      ],
+      "winning_moves": ["timed it to admission season",
+                        "gave a forwardable one-pager for the board",
+                        "portfolio with 3 measurable results"]
+    },
+    {
+      "id": "conv_010", "outcome": "lost", "value_pkr": 0, "channel": "whatsapp",
+      "category": "pharmacy", "city": "Faisalabad",
+      "lead": {"name": "Al Noor Medical Store", "audit_score": 66,
+               "top_issue": "no_schema", "second_issue": "no_open_graph"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Al Noor Medical Store ki site mein LocalBusiness schema nahi hai aur social sharing tags missing hain. Is se Google Maps ranking weak rehti hai. Fix karwa dein?"},
+        {"from": "lead", "text": "abhi nahi"},
+        {"from": "agent", "text": "Theek hai, main 3 din baad ek naya audit point bhej dunga. Koi pressure nahi."},
+        {"from": "lead", "text": "ok"},
+        {"from": "agent", "text": "Sir abhi kuch socha?"},
+        {"from": "lead", "text": "nahi"},
+        {"from": "agent", "text": "Reminder - aap ki site abhi bhi slow hai."},
+        {"from": "lead", "text": "stop messaging"}
+      ],
+      "losing_moves": ["follow-ups carried no new value",
+                       "nagged instead of giving a new insight",
+                       "repeated the same point three times"]
+    },
+    {
+      "id": "conv_011", "outcome": "won", "value_pkr": 35000, "channel": "whatsapp",
+      "category": "restaurant", "city": "Lahore",
+      "lead": {"name": "Bundu Khan BBQ", "audit_score": 35,
+               "top_issue": "slow_ttfb", "second_issue": "no_whatsapp_link"},
+      "messages": [
+        {"from": "agent", "text": "Salam! Bundu Khan BBQ ki site check ki: server ka jawab 3.4 second mein aa raha hai (TTFB). Mobile 3G pe is ka matlab hai 8-9 second - customer tab band kar deta hai. Aur WhatsApp order button bilkul nahi hai. Dono mil kar aap ki online orders par direct asar dal rahe hain. 2 minute hain to bataoon?"},
+        {"from": "lead", "text": "humari site hosting slow hai pata hai"},
+        {"from": "agent", "text": "Haan - aur achi baat ye hai ke hosting badalne se hi aadha masla hal ho jata hai. Main hostinging bhi shift kar deta hoon aur site ko halka kar deta hoon (images compress + caching). Target: 3.4 second se 1.2 second. Main pehle free speed test report bhejoon - aap khud dekh lein?"},
+        {"from": "lead", "text": "zaroor bhejo"},
+        {"from": "agent", "text": "Sham tak bhej raha hoon: before/after comparison, aap ki site aur competitor ki site ke sath. Is ke sath free mockup bhi hoga."},
+        {"from": "lead", "text": "acha theek hai kaam shuru karo"},
+        {"from": "agent", "text": "Bohat shukriya. Recommended package 35,000 (10 pages + speed optimisation + SEO + Google Business). 50% advance aaj, 10 din mein live. Menu aur photos bhej dena."}
+      ],
+      "winning_moves": ["they already suspected hosting - agent confirmed it with a number",
+                        "before/after proof artifact", "named a concrete target (1.2s)"]
+    },
+    {
+      "id": "conv_012", "outcome": "pending", "value_pkr": 0, "channel": "whatsapp",
+      "category": "real_estate", "city": "Karachi",
+      "lead": {"name": "DHA Properties", "audit_score": 58,
+               "top_issue": "no_viewport", "second_issue": "broken_links"},
+      "messages": [
+        {"from": "agent", "text": "Salam! DHA Properties ki site check ki: mobile pe listings table cut ho raha hai (viewport missing), aur 2 project links 404 de rahe hain. Facebook ads se jo traffic aa raha hai, wo landing page par land hi nahi ho pa raha. Ek landing page is ka hal hai - 2 minute hain?"},
+        {"from": "lead", "text": "hum ads pe 80 hazar mahine kharch karte hain"},
+        {"from": "agent", "text": "To hisaab aur wazeh ho jata hai. Agar landing page se cost-per-lead 20% gir jaye to 16,000 mahine bachte hain - site 2 mahine mein free. Main aap ke liye ek ad-specific landing page ka free mockup bana kar bhejta hoon, jis par sirf ek form aur 3 projects honge."},
+        {"from": "lead", "text": "team se discuss karta hoon"},
+        {"from": "agent", "text": "Zaroor. Main ek one-page summary bhej deta hoon jo aap team ko forward kar sakein. Mockup bhi ready hai jab chahein dekh lein - koi commitment nahi."}
+      ],
+      "winning_moves": ["tied the fix to their ad spend", "forwardable one-pager"]
+    }
+  ]
+}

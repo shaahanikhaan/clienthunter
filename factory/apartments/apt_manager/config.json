@@ -1,0 +1,34 @@
+{
+  "name": "manager",
+  "display": "Manager (supervisor)",
+  "description": "Hierarchical supervisor: owns the task queue, worker lifecycle, quotas and your real machine access (mouse / CMD / PowerShell / screen).",
+  "trained": null,
+  "permissions": {
+    "subprocess": true,
+    "screen": true,
+    "mouse": false,
+    "email": false,
+    "whatsapp": false,
+    "browser": false
+  },
+  "limits": {
+    "max_concurrent_workers": 3,
+    "task_timeout_s": 240,
+    "quarantine_after_errors": 4,
+    "daily_budgets": {
+      "hunter": 40,
+      "enricher": 80,
+      "auditor": 80,
+      "outreach": 20,
+      "inbox": 40,
+      "followup": 25,
+      "platform_whatsapp": 20,
+      "platform_linkedin": 15,
+      "platform_facebook": 15,
+      "platform_instagram": 15,
+      "platform_github": 15,
+      "builder": 12
+    }
+  },
+  "notes": "Terminal commands go through tools/terminal.py: allowlist first, argv-only, denylist backstop, everything logged."
+}

@@ -1,0 +1,30 @@
+{
+ "name": "apt_auditor",
+ "description": "Audits a client's website (SSL, speed, mobile, SEO, links) and produces the proof report used in outreach.",
+ "permissions": {
+  "internet": true,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "timeout_s": 12,
+  "max_link_checks": 15,
+  "max_bytes": 300000,
+  "request_interval_s": 2.0,
+  "request_budget": 300
+ },
+ "tools": [
+  "web",
+  "audit",
+  "file"
+ ],
+ "expected_models": [
+  "impact.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

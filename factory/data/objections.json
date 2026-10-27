@@ -1,0 +1,143 @@
+{
+  "_comment": "Objection playbook for apt_convincer. 'signals' are matched against the client's message; 'responses' are ranked by learned success_rate (apt_self_trainer updates these automatically from your won/lost outcomes). Placeholders: {business_name} {city} {issue} {issue_benefit} {price} {monthly} {my_name} {portfolio_item}.",
+
+  "objections": [
+    {
+      "id": "too_expensive",
+      "name": "Bohat mehnga hai",
+      "signals": ["mehnga", "mehanga", "mahnga", "expensive", "itna paisa", "rate zyada",
+                  "budget nahi", "paise nahi", "sasta", "cheap", "fiverr", "5000", "cost zyada"],
+      "priority": "high",
+      "responses": [
+        {"style": "tiered", "success_rate": 0.42,
+         "text": "Samajh sakta hoon - har business ka budget hota hai. Is liye 3 options hain: Basic {basic_price} (5 pages, mobile ready, WhatsApp button), Recommended {recommended_price} (jo zyada tar {category} ke liye best hai), aur Premium {premium_price}. Aap ka kaam Basic mein bhi ho jayega, farq sirf growth features ka hai."},
+        {"style": "monthly", "success_rate": 0.38,
+         "text": "Agar ek saath itna mushkil hai, to monthly option hai: sirf {monthly} mahine + chhoti setup fee. Upfront bohat kam, aur aap jab chahein rok sakte hain. Zyada tar {category} wale isi se shuru karte hain."},
+        {"style": "roi", "success_rate": 0.35,
+         "text": "Mehnga tab lagta hai jab wapas na aaye. {business_name} ke liye sirf {issue} theek karne se {issue_benefit} - ek naya client har mahine is ka paisa nikal deta hai."},
+        {"style": "trial", "success_rate": 0.31,
+         "text": "Aap ko decide karne se pehle dekhna chahiye. Main {business_name} ka free homepage mockup bana kar bhejta hoon - 24 ghante mein. Pasand aaye tab baat karte hain paisay ki."}
+      ],
+      "proof": ["Foodpanda/Zomato commission 25-30% hai, direct order se wo bach jata hai",
+                "Sirf 2 extra orders mahine mein = site ka kharcha nikal jata hai",
+                "7 din ke andar delivery ya paisay wapas"],
+      "followup_angle": "basic package ya monthly plan ya free mockup"
+    },
+    {
+      "id": "not_now",
+      "name": "Abhi nahi / baad mein",
+      "signals": ["abhi nahi", "baad mein", "agle mahine", "next month", "time nahi",
+                  "busy hoon", "kal", "parso", "agle saal", "later", "not now"],
+      "priority": "low",
+      "responses": [
+        {"style": "schedule", "success_rate": 0.44,
+         "text": "Bilkul theek hai - abhi nahi to kabhi nahi nahi. Main {followup_days} din baad ek chhoti si cheez bhej dunga: {business_name} ki site ka naya audit point. Tab decide kar lena, koi pressure nahi."},
+        {"style": "micro_commit", "success_rate": 0.33,
+         "text": "Koi baat nahi. Sirf 2 minute ka kaam hai: main {business_name} ka free 1-page mockup bana doon? Aap ke paas ready hoga, jab mann kare dekh lena."}
+      ],
+      "proof": ["Audit report aap ke paas rahegi - free hai", "Mockup free hai, koi commitment nahi"],
+      "followup_angle": "naya audit finding ya naya portfolio piece"
+    },
+    {
+      "id": "already_have_site",
+      "name": "Meri site pehle se hai",
+      "signals": ["pehle se hai", "already", "chal rahi hai", "meri site hai", "bana di hai",
+                  "bhatije ne", "hum ne banwa li", "existing website"],
+      "priority": "high",
+      "responses": [
+        {"style": "audit_proof", "success_rate": 0.47,
+         "text": "Bohat acha - is ka matlab aap online hain, bas farq dekhna hai. Main ne {business_name} ki site abhi check ki: {issue}. Is ki wajah se {issue_benefit}. Ye 2 cheezein theek kar den to aap ki maujooda site hi 2x kaam karegi - banwane ki bhi zarurat nahi."},
+        {"style": "compare", "success_rate": 0.29,
+         "text": "Aap ki site hai, lekin kya wo mobile pe 3 second mein khulti hai? {business_name} ki site ka score {audit_score}/100 hai. {issue} - ye woh jagah hai jahan customers quietly chale jate hain."}
+      ],
+      "proof": ["Live audit: score, TTFB, mobile viewport", "3 specific issues with evidence"],
+      "followup_angle": "naya audit finding (har follow-up pe ek naya issue)"
+    },
+    {
+      "id": "need_to_think",
+      "name": "Sochna hai",
+      "signals": ["sochna hai", "soch", "think", "decide nahi", "partner se pooch", "board se",
+                  "discuss", "dekhta hoon", "consider"],
+      "priority": "medium",
+      "responses": [
+        {"style": "trial", "success_rate": 0.41,
+         "text": "Zaroor sochiye - ye faisla aap ke business ka hai. Sochne mein asani ho to main {business_name} ka free mockup bana doon aaj? Haath mein cheez ho to decision jaldi hota hai."},
+        {"style": "decision_help", "success_rate": 0.34,
+         "text": "Main aap ka faisla aasan kar deta hoon: ek page pe likh kar bhejta hoon - kya milega, kitne din mein, kitne paise, aur guarantee kya hai. Aap partner ko forward kar dena."}
+      ],
+      "proof": ["Free mockup 24 ghante mein", "Likha hua scope - koi hidden charges nahi"],
+      "followup_angle": "free mockup + written one-pager"
+    },
+    {
+      "id": "send_details",
+      "name": "Details bhejo / proposal chahiye",
+      "signals": ["details bhejo", "send details", "proposal", "quotation", "rate card",
+                  "email pe bhejo", "tafseel", "information bhejo"],
+      "priority": "medium",
+      "responses": [
+        {"style": "structured", "success_rate": 0.46,
+         "text": "Zaroor. {business_name} ke liye: (1) {issue} theek karte hain - {issue_benefit}. (2) Scope: {scope}. (3) Time: {delivery_days} din. (4) Price: {price}, ya {monthly} mahine. (5) Guarantee: pasand na aaye to 7 din mein paisay wapas. Ek sawal: kya aap chahte hain main free mockup bhi saath bana doon?"},
+        {"style": "short", "success_rate": 0.36,
+         "text": "Bhej raha hoon. 3 line mein: {issue} theek karenge, {delivery_days} din, {price} (ya {monthly} mahine). Details ke sath {business_name} ka audit report bhi attach hai - aap khud verify kar sakte hain."}
+      ],
+      "proof": ["Audit report attached", "Written scope with delivery date and guarantee"],
+      "followup_angle": "mockup ke sath proposal"
+    },
+    {
+      "id": "who_are_you",
+      "name": "Aap kaun hain / trust nahi",
+      "signals": ["aap kaun", "kaun ho", "who are you", "trust", "bharosa", "real ho",
+                  "dhoka", "fraud", "scam", "reference", "portfolio", "pehle kaam dikhao"],
+      "priority": "high",
+      "responses": [
+        {"style": "proof_first", "success_rate": 0.49,
+         "text": "Wajib sawal hai. Main {my_name}, {my_city} se. {years} saal se {category} ke clients ke sath kaam kar raha hoon. Abhi haal hi mein {portfolio_item} ki site banayi - result: {portfolio_result}. Aap chahein to un se baat kar sakte hain. Aur {business_name} ki site ka audit main ne abhi kiya hai: {issue}. Yeh report free hai, aap rakh lein."},
+        {"style": "no_risk", "success_rate": 0.40,
+         "text": "Trust tab banta hai jab risk aap pe na ho. Is liye: (1) pehle free mockup, (2) advance sirf {advance_percent}%, (3) 7 din mein pasand na aaye to paisay wapas, (4) source code aap ke naam. Shuruat chhoti karte hain, bara kaam baad mein."}
+      ],
+      "proof": ["Portfolio with measurable results", "Client references available",
+                "50% advance + 7-day refund + source code ownership"],
+      "followup_angle": "portfolio piece + client reference"
+    },
+    {
+      "id": "already_have_developer",
+      "name": "Humara developer / bhatija hai",
+      "signals": ["developer hai", "bhatija", "bhanja", "humara banda", "in-house",
+                  "team hai", "khud banwa lenge", "cousin"],
+      "priority": "medium",
+      "responses": [
+        {"style": "complement", "success_rate": 0.37,
+         "text": "Bohat acha, kaam chal raha hai to theek hai. Main sirf itna kehta hoon: {business_name} ki site mein {issue} hai. Agar aap ka developer is ko theek kar de to mujhe khushi hogi - main chala jata hoon. Lekin agar 2 hafte guzar jayein aur wo na ho paye to mujhe yaad kar lena, main 1 din mein kar dunga."}
+      ],
+      "proof": ["Specific issue they can hand to their developer", "No pressure, easy exit"],
+      "followup_angle": "check back after 2 weeks"
+    },
+    {
+      "id": "bad_experience",
+      "name": "Pichli dafa dhoka hua tha",
+      "signals": ["dhoka", "fraud", "pichli dafa", "pehle wale ne", "paise le ke", "gayab",
+                  "half kaam", "experience acha nahi", "scam"],
+      "priority": "high",
+      "responses": [
+        {"style": "de_risk", "success_rate": 0.45,
+         "text": "Bura hua - ye masla aam hai is field mein. Is liye main ulta chal raha hoon: pehle kaam, baad mein paisay. {business_name} ka free mockup 24 ghante mein, advance sirf {advance_percent}%, likha hua scope, aur 7 din ki money-back guarantee. Jo cheez aap ko dubara dhoondne se bachaye, wo main pehle de deta hoon."}
+      ],
+      "proof": ["Build-first: free mockup before payment", "Written scope + refund window"],
+      "followup_angle": "free mockup with zero commitment"
+    },
+    {
+      "id": "no_need_website",
+      "name": "Mujhe website ki zarurat nahi (Instagram/Facebook kaafi hai)",
+      "signals": ["instagram hai", "facebook page hai", "zarurat nahi", "social media kaafi",
+                  "whatsapp business hai", "page chal raha hai"],
+      "priority": "medium",
+      "responses": [
+        {"style": "gap", "success_rate": 0.39,
+         "text": "Sahi hai, Instagram se kaam chal raha hai - main us ko replace nahi kar raha. Bas ek khaali jagah bhar raha hoon: jab koi Google pe '{category} near me' likhta hai to Instagram post nahi aata, website aati hai. {business_name} abhi us search mein nahi hai. Ek chhota page is gap ko band kar deta hai."}
+      ],
+      "proof": ["Google Maps listing exists but has no website link",
+                "Local search intent: 'near me' queries"],
+      "followup_angle": "Google Maps audit of their own listing"
+    }
+  ]
+}

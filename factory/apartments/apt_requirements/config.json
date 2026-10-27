@@ -1,0 +1,25 @@
+{
+ "name": "apt_requirements",
+ "description": "Turns a conversation into a structured JSON brief by asking progressive questions.",
+ "permissions": {
+  "internet": false,
+  "email": false,
+  "whatsapp": false,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_questions_per_session": 8
+ },
+ "tools": [
+  "file",
+  "nlp_urdu"
+ ],
+ "expected_models": [
+  "question_templates.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}

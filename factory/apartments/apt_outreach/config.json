@@ -1,0 +1,30 @@
+{
+ "name": "apt_outreach",
+ "description": "Sends the personalised first contact - always opens with a specific audit finding, never a generic pitch.",
+ "permissions": {
+  "internet": true,
+  "email": true,
+  "whatsapp": true,
+  "browser": false,
+  "file_read": true,
+  "file_write": true,
+  "subprocess": false,
+  "shared_write": true
+ },
+ "limits": {
+  "max_per_day": 20,
+  "whatsapp_max_words": 100,
+  "email_max_words": 200,
+  "cool_off_hours": 18
+ },
+ "tools": [
+  "whatsapp",
+  "email",
+  "file"
+ ],
+ "expected_models": [
+  "templates.json",
+  "generator.json"
+ ],
+ "_notes": "Effective permission = config/permissions.json (global) AND this file AND permissions/allowlist.json AND runtime override (offline mode / kill switch)."
+}
